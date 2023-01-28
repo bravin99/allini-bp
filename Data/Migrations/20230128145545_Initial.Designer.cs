@@ -12,7 +12,7 @@ using allinibp.Data;
 namespace allinibp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230128092736_Initial")]
+    [Migration("20230128145545_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

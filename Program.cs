@@ -18,7 +18,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddMudServices();
