@@ -1,0 +1,14 @@
+﻿<MudNavMenu>
+    <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
+    <MudNavLink Href="/categories" Match="NavLinkMatch.All">Categories</MudNavLink>
+    <MudNavLink Href="/products" Match="NavLinkMatch.Prefix">Products</MudNavLink>
+    <MudNavLink Href="/suppliers" Match="NavLinkMatch.Prefix">Suppliers</MudNavLink>
+    <MudNavLink Href="/sales" Match="NavLinkMatch.Prefix">Sales</MudNavLink>
+    <MudNavLink Href="/stock" Match="NavLinkMatch.Prefix">Stock</MudNavLink>
+    <MudNavLink Href="/customers" Match="NavLinkMatch.Prefix">Customers</MudNavLink>
+    <MudNavGroup Title="Stock" Expanded="true">
+        <MudNavLink Href="/stockcheck"  Match="NavLinkMatch.Prefix">Stock Checks</MudNavLink>
+        <MudNavLink Href="/reconsile"  Match="NavLinkMatch.Prefix">Reconsile</MudNavLink>
+    </MudNavGroup>
+    <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">About</MudNavLink>
+</MudNavMenu>
