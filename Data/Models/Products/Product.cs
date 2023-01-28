@@ -1,16 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using allinibp.Data.Models.Suppliers;
 
-namespace allinibp.Data.Models.Products
+namespace allinibp.Data.Models
 {
     public class Category
     {
         public int Id { get; set; }
+        [Required]
+        [StringLength(45, ErrorMessage = "The name is too long")]
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public ICollection<Product>? Proucts { get; set; }
     }
 
     public class Product
