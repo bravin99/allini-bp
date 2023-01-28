@@ -12,6 +12,8 @@ namespace allinibp.Data.Models
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public ICollection<Product>? Proucts { get; set; }
+        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public DateTime Updated { get; set; } = DateTime.UtcNow;
     }
 
     public class Product

@@ -1,0 +1,42 @@
+
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Category Name" HelperText="Max. 45 characters"
+                                @bind-Value="model.Name" For="@(() => model.Name)" Counter="45" Immediate="true" />
+                    <MudTextField Label="Description" Class="mt-3"
+                                @bind-Value="model.Description" For="@(() => model.Description)" Lines="3"/>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" StartIcon="@Icons.Material.Filled.Add">Add</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="5">
+            <MudPaper Class="pa-4 mud-height-full">
+                <MudText Typo="Typo.subtitle2">Validation Summary</MudText>
+                @if (validation_success)
+                {
+                    <MudText Color="Color.Success">@CreateResponse</MudText>
+                }
+                else
+                {
+                    <MudText Color="@Color.Error">
+                        <ValidationSummary />
+                    </MudText>
+                }
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+@code
+{
+    [Parameter] public CategoryDto model { get; set; } = new CategoryDto();
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public bool validation_success { get; set; } = false;
+    [Parameter] public string? CreateResponse { get; set; }
+}

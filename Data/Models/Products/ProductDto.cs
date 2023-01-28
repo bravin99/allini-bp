@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace allinibp.Data.Models
 {
-    public class ProductDto
+    public class CategoryDto
     {
         [Required]
         [StringLength(45, ErrorMessage = "The name is too long")]

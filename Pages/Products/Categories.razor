@@ -1,0 +1,38 @@
+@page "/categories"
+@inject IProductService _productService
+
+<PageTitle>Categories</PageTitle>
+<MudContainer>
+    <CategoryForm model=@NewCategory OnValidSubmit=@OnValidSubmit CreateResponse=@CreateResponse validation_success=@validation_success />
+
+    @CategoryList
+</MudContainer>
+
+@code
+{
+    @* table *@
+    public List<Category>? CategoryList = new List<Category>();
+    @* table end *@
+
+    public CategoryDto NewCategory = new CategoryDto();
+    public bool validation_success = false;
+    public string? CreateResponse;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCategoryList();
+    }
+
+    public async Task GetCategoryList()
+    {
+        CategoryList = await _productService.GetCategories()!;
+    }    
+
+    async void OnValidSubmit()
+    {
+        var Response = await _productService.CreateCategory(NewCategory);
+        CreateResponse = Response;
+        validation_success = true;
+        NewCategory = new CategoryDto();
+    }
+}
