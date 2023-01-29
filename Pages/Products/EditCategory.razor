@@ -1,0 +1,58 @@
+@page "/categories/{id:int}/edit"
+@inject ICategoryService CategoryService
+@inject NavigationManager NavigationManager
+
+@if (CategoryToEdit != null)
+{
+<PageTitle>Category Edit: @CategoryToEdit.Name</PageTitle>
+<MudContainer>
+    <CategoryForm ModelDto="CategoryDto" OnValidSubmit="OnValidSubmit" CreateResponse=@CreateResponse validation_success="validation_success" ButtonTxt="Edit Category"/>
+</MudContainer>
+
+}
+else if (CategoryToEdit == null)
+{
+    <PageTitle>Category Edit</PageTitle>
+    <MudAlert Severity="Severity.Info">The category you are trying to edit does not exist!</MudAlert>
+
+    <MudButton Class="mt-5" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.SkipPrevious" Color="Color.Tertiary" @onclick="GoBack" aria-label="Go back">Go Back</MudButton>
+}
+
+@code
+{
+    [Parameter] public int id { get; set; }
+    public Category CategoryToEdit { get; set; } = new Category();
+    public CategoryDto CategoryDto { get; set; } = new CategoryDto();
+    public string CreateResponse { get; set; } = string.Empty;
+    public bool validation_success { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCategory();
+        if (CategoryToEdit != null)
+        {
+            CategoryDto.Name = CategoryToEdit.Name;
+            CategoryDto.Description = CategoryToEdit.Description;
+            CategoryDto.Display = CategoryToEdit.Display;
+        }
+    }
+
+    async Task GetCategory()
+    {
+        CategoryToEdit = await CategoryService.GetCategory(id);
+    }
+
+    public async Task OnValidSubmit()
+    {
+        var res = await CategoryService.UpdateCategory(id, CategoryDto);
+        validation_success = true;
+        CreateResponse = res;
+        GoBack();
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/categories");
+    }
+
+}

@@ -10,8 +10,8 @@ namespace allinibp.Services
     {
         public Task<string> CreateCategory(CategoryDto request);
         public Task<Category[]>? GetCategories();
-        public Task<Category> GetCategory();
-        public Task<string> UpdateCategory(CategoryDto request);
+        public Task<Category> GetCategory(int Id);
+        public Task<string> UpdateCategory(int Id, CategoryDto request);
         public Task<string> DeleteCategory(int Id);
 
     }

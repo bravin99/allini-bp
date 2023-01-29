@@ -1,10 +1,12 @@
 @page "/categories"
 @inject ICategoryService CategoryService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime Js
+@inject IDialogService DialogService
 
 <PageTitle>Categories</PageTitle>
 <MudContainer>
-    <CategoryForm ModelDto="NewCategory" OnValidSubmit="OnValidSubmit" CreateResponse=@CreateResponse validation_success="validation_success" />
+    <CategoryForm ModelDto="NewCategory" OnValidSubmit="OnValidSubmit" CreateResponse=@CreateResponse validation_success="validation_success" ButtonTxt="Create Category"/>
 
     <MudTable Items="@CategoryList" Dense="false" Hover="true" Bordered="false" Striped="false" Filter="new Func<Category,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Class="mt-5 mb-3">
         <ToolBarContent>
@@ -14,19 +16,22 @@
         </ToolBarContent>
         <HeaderContent>
             <MudTh>Name</MudTh>
-            <MudTh>Description</MudTh>
             <MudTh>Products Count</MudTh>
             <MudTh>Display</MudTh>
             <MudTh>Created</MudTh>
             <MudTh>Updated</MudTh>
+            <MudTh>Actions</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Name">@context.Name</MudTd>
-            <MudTd DataLabel="Description">@context.Description</MudTd>
             <MudTd DataLabel="Products Count">@context.Products!.Count()</MudTd>
             <MudTd DataLabel="Display">@context.Display</MudTd>
             <MudTd DataLabel="Created">@context.Created</MudTd>
             <MudTd DataLabel="Updated">@context.Updated</MudTd>
+            <MudTd DataLabel="Actions">
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Tertiary" aria-label="edit" @onclick="@(() => NavigationManager.NavigateTo($"/categories/{context.Id}/edit"))"></MudIconButton>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" @onclick="@(() => DeleteCategory(@context.Id))"></MudIconButton>
+            </MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager />
@@ -58,7 +63,6 @@
     public CategoryDto NewCategory { get; set; } = new CategoryDto();
     public bool validation_success = false;
     public string? CreateResponse;
-
     protected override async Task OnInitializedAsync()
     {
         await GetCategoryList();
@@ -75,6 +79,19 @@
         CreateResponse = Response;
         validation_success = true;
         NewCategory = new CategoryDto();
+        StateHasChanged();
         await OnInitializedAsync();
     }
+
+    async void DeleteCategory(int get_id)
+    {
+        var c = await CategoryService.GetCategory(get_id);
+        if (await Js.InvokeAsync<bool>("confirm", $"Are you sure you wan't to delete {c.Name}?"))
+        {
+            var result = await CategoryService.DeleteCategory(c.Id);
+            StateHasChanged();
+            await GetCategoryList();
+        }
+    }
+
 }

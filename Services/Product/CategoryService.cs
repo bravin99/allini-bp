@@ -38,9 +38,19 @@ namespace allinibp.Services
             }
         }
 
-        public Task<string> DeleteCategory(int Id)
+        public async Task<string> DeleteCategory(int Id)
         {
-            throw new NotImplementedException();
+            var c = await _context.Categories!.FirstOrDefaultAsync(c => c.Id == Id);
+            if (c != null)
+            {
+                _context.Categories!.Remove(c);
+                await _context.SaveChangesAsync();
+                return $"The category {c!.Name}, has been deleted!";
+            }
+            else
+            {
+                return $"The category with id {c!.Name}, was not found!";
+            }
         }
 
         public async Task<Category[]>? GetCategories()
@@ -50,14 +60,25 @@ namespace allinibp.Services
             return !catgs.Any() ? null! : catgs;
         }
 
-        public Task<Category> GetCategory()
+        public async Task<Category> GetCategory(int Id)
         {
-            throw new NotImplementedException();
+            var cat = await _context.Categories!.Include(c => c.Products).FirstOrDefaultAsync(c => c.Id == Id);
+            return cat == null ? null! : cat;
         }
 
-        public Task<string> UpdateCategory(CategoryDto request)
+        public async Task<string> UpdateCategory(int Id, CategoryDto request)
         {
-            throw new NotImplementedException();
+            var cat = await _context.Categories!.Include(c => c.Products).FirstOrDefaultAsync(c => c.Id == Id);
+            if (cat != null)
+            {
+                cat.Name = request.Name;
+                cat.Description = request.Description;
+                cat.Display = request.Display;
+                cat.Updated = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+                return $"Category {cat.Name} updated!";
+            }
+            return $"Category {cat!.Name} not found!";
         }
     }
 }
