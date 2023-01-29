@@ -11,9 +11,10 @@ namespace allinibp.Data.Models
         [StringLength(45, ErrorMessage = "The name is too long")]
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public ICollection<Product>? Proucts { get; set; }
+        public ICollection<Product>? Products { get; set; }
         public DateTime Created { get; set; } = DateTime.UtcNow;
         public DateTime Updated { get; set; } = DateTime.UtcNow;
+        public bool Display { get; set; } = true;
     }
 
     public class Product

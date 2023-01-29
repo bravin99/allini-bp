@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using allinibp.Data;
@@ -11,9 +12,11 @@ using allinibp.Data;
 namespace allinibp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230129082430_Upadate Categories and add IdentityRole")]
+    partial class UpadateCategoriesandaddIdentityRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -404,7 +407,7 @@ namespace allinibp.Data.Migrations
             modelBuilder.Entity("allinibp.Data.Models.Product", b =>
                 {
                     b.HasOne("allinibp.Data.Models.Category", null)
-                        .WithMany("Products")
+                        .WithMany("Proucts")
                         .HasForeignKey("CategoryId");
 
                     b.HasOne("allinibp.Data.Models.Suppliers.Supplier", "Supplier")
@@ -416,7 +419,7 @@ namespace allinibp.Data.Migrations
 
             modelBuilder.Entity("allinibp.Data.Models.Category", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("Proucts");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,17 +1,18 @@
 
-<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+<EditForm Model="@ModelDto" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
     <MudGrid>
         <MudItem xs="12" sm="7">
             <MudCard>
                 <MudCardContent>
                     <MudTextField Label="Category Name" HelperText="Max. 45 characters"
-                                @bind-Value="model.Name" For="@(() => model.Name)" Counter="45" Immediate="true" />
+                                @bind-Value="ModelDto!.Name" For="@(() => ModelDto!.Name)" Counter="45" Immediate="true" />
                     <MudTextField Label="Description" Class="mt-3"
-                                @bind-Value="model.Description" For="@(() => model.Description)" Lines="3"/>
+                                @bind-Value="ModelDto.Description" For="@(() => ModelDto.Description)" Lines="2"/>
+                    <MudSwitch Label="Display?" @bind-Checked="@ModelDto.Display" Color="Color.Secondary" Class="mt-3" />
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" StartIcon="@Icons.Material.Filled.Add">Add</MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mx-auto">Add Category</MudButton>
                 </MudCardActions>
             </MudCard>
         </MudItem>
@@ -35,7 +36,7 @@
 
 @code
 {
-    [Parameter] public CategoryDto model { get; set; } = new CategoryDto();
+    [Parameter] public CategoryDto ModelDto { get; set; } = new CategoryDto();
     [Parameter] public EventCallback OnValidSubmit { get; set; }
     [Parameter] public bool validation_success { get; set; } = false;
     [Parameter] public string? CreateResponse { get; set; }

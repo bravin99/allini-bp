@@ -1,20 +1,61 @@
 @page "/categories"
-@inject IProductService _productService
+@inject ICategoryService CategoryService
+@inject NavigationManager NavigationManager
 
 <PageTitle>Categories</PageTitle>
 <MudContainer>
-    <CategoryForm model=@NewCategory OnValidSubmit=@OnValidSubmit CreateResponse=@CreateResponse validation_success=@validation_success />
+    <CategoryForm ModelDto="NewCategory" OnValidSubmit="OnValidSubmit" CreateResponse=@CreateResponse validation_success="validation_success" />
 
-    @CategoryList
+    <MudTable Items="@CategoryList" Dense="false" Hover="true" Bordered="false" Striped="false" Filter="new Func<Category,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Class="mt-5 mb-3">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Category List</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="SearchParam" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Name</MudTh>
+            <MudTh>Description</MudTh>
+            <MudTh>Products Count</MudTh>
+            <MudTh>Display</MudTh>
+            <MudTh>Created</MudTh>
+            <MudTh>Updated</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Description">@context.Description</MudTd>
+            <MudTd DataLabel="Products Count">@context.Products!.Count()</MudTd>
+            <MudTd DataLabel="Display">@context.Display</MudTd>
+            <MudTd DataLabel="Created">@context.Created</MudTd>
+            <MudTd DataLabel="Updated">@context.Updated</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+
 </MudContainer>
 
 @code
 {
     @* table *@
-    public List<Category>? CategoryList = new List<Category>();
+    public Category[]? CategoryList;
+    private string SearchParam = string.Empty;
+    private Category selectedItem1 = null!;
+    private bool FilterFunc1(Category element) => FilterFunc(element, SearchParam);
+
+    private bool FilterFunc(Category element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
     @* table end *@
 
-    public CategoryDto NewCategory = new CategoryDto();
+    public CategoryDto NewCategory { get; set; } = new CategoryDto();
     public bool validation_success = false;
     public string? CreateResponse;
 
@@ -25,14 +66,15 @@
 
     public async Task GetCategoryList()
     {
-        CategoryList = await _productService.GetCategories()!;
-    }    
+        CategoryList = await CategoryService.GetCategories()!;
+    }
 
     async void OnValidSubmit()
     {
-        var Response = await _productService.CreateCategory(NewCategory);
+        var Response = await CategoryService.CreateCategory(NewCategory);
         CreateResponse = Response;
         validation_success = true;
         NewCategory = new CategoryDto();
+        await OnInitializedAsync();
     }
 }
