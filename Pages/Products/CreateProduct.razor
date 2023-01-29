@@ -1,0 +1,42 @@
+@page "/products/create"
+@inject IProductService ProductService
+@inject ICategoryService CategoryService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create A New Product</PageTitle>
+
+<MudContainer>
+    <ProductForm ProductDto="ProductDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="categories" ButtonTxt="Create Product" />
+</MudContainer>
+
+@code
+{
+    public ProductDto ProductDto = new ProductDto();
+    public Category[]? categories;
+    public Category category = new Category();
+    public bool success = false;
+    public string? Response { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCategories();
+    }
+
+    private async Task GetCategories()
+    {
+        categories = await CategoryService.GetCategories()!;
+    }
+
+    private async Task OnValidSubmit()
+    {
+        Response = await ProductService.CreateProduct(ProductDto);
+        ProductDto = new ProductDto();
+        BackToProucts();
+    }
+
+    void BackToProucts()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+
+}

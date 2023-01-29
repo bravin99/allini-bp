@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using allinibp.Data.Models.Suppliers;
+using allinibp.Data.Models;
 
 namespace allinibp.Data.Models
 {
@@ -25,6 +25,7 @@ namespace allinibp.Data.Models
         public string BarCode { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public double Quantity { get; set; }
+        public Category? Category { get; set; }
         // minimum stock: reoder point
         public double MinimumStock { get; set; }
         // This is the extra inventory that is kept on hand to ensure that items are available

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace allinibp.Data.Models.Suppliers
+namespace allinibp.Data.Models
 {
     public class Supplier
     {

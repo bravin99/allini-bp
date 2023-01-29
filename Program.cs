@@ -36,6 +36,7 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifes
 
 // my services
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
