@@ -35,9 +35,8 @@ namespace allinibp.Data.Models
         [Required]
         public double SalesPrice { get; set; }
         [Required]
-        public DateTime? EndOfShelfLife { get; set; }
+        public DateTime EndOfShelfLife { get; set; }
         public string Image { get; set; } = string.Empty;
         public Location Location { get; set; }
-        public DateTime LastCount { get; set; } = DateTime.UtcNow;
     }
 }

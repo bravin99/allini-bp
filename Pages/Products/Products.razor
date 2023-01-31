@@ -14,22 +14,30 @@
             <MudTextField @bind-Value="SearchParam" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
+            <MudTh>SKU</MudTh>
             <MudTh>Bar Code</MudTh>
             <MudTh>Name</MudTh>
             <MudTh>Quantity</MudTh>
             <MudTh>Cost</MudTh>
             <MudTh>Sales Price</MudTh>
-            <MudTh>Updated</MudTh>
+            @* <MudTh>Last Count</MudTh> *@
+            <MudTh>Remaining</MudTh>
+            <MudTh>Location</MudTh>
+            <MudTh>Actions</MudTh>
         </HeaderContent>
         <RowTemplate>
+            <MudTd DataLabel="Products Count">@context.Sku</MudTd>
             <MudTd DataLabel="Name">@context.BarCode</MudTd>
             <MudTd DataLabel="Products Count">@context.Name</MudTd>
             <MudTd DataLabel="Display">@context.Quantity</MudTd>
+            <MudTd DataLabel="Display">@context.Cost</MudTd>
             <MudTd DataLabel="Created">@context.SalesPrice</MudTd>
-            <MudTd DataLabel="Updated">@context.LastCount</MudTd>
+            @* <MudTd DataLabel="Updated">@context.LastCount</MudTd> *@
+            <MudTd DataLabel="Updated">@context.AdjustedCount</MudTd>
+            <MudTd DataLabel="Updated">@context.Location</MudTd>
             <MudTd DataLabel="Actions">
-                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Tertiary" aria-label="edit"></MudIconButton>
-                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete"></MudIconButton>
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Tertiary" aria-label="edit" Title="Edit"></MudIconButton>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" Title="Delete"></MudIconButton>
             </MudTd>
         </RowTemplate>
         <PagerContent>

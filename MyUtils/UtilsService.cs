@@ -16,5 +16,11 @@ namespace allinibp.Services
 
             return Task.FromResult<string>(randString);
         }
+
+        public Task<DateOnly> ToDateOnly(DateTime date)
+        {
+            var nDate = new DateOnly(date.Year, date.Month, date.Day);
+            return Task.FromResult<DateOnly>(nDate);
+        }
     }
 }

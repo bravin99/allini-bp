@@ -26,14 +26,15 @@ namespace allinibp.Services
                 Name = request.Name,
                 Category = request.Category,
                 Quantity = request.Quantity,
+                AdjustedCount = request.Quantity,
                 MinimumStock = request.MinimumStock,
                 SafetyStock = request.SafetyStock,
                 Cost = request.Cost,
                 SalesPrice = request.SalesPrice,
-                EndOfShelfLife = request.EndOfShelfLife,
+                EndOfShelfLife = _myUtils.ToDateOnly(request.EndOfShelfLife).Result,
                 Image = request.Image,
                 Location = request.Location,
-                LastCount = request.LastCount,
+                LastCount = _myUtils.ToDateOnly(DateTime.UtcNow).Result,
             };
             // var category = await _dbContext.Categories!.FirstOrDefaultAsync(c => c.Id == request.CategoryId);
             // if (category != null)
@@ -80,10 +81,10 @@ namespace allinibp.Services
                 product.SafetyStock = request.SafetyStock;
                 product.Cost = request.Cost;
                 product.SalesPrice = request.SalesPrice;
-                product.EndOfShelfLife = request.EndOfShelfLife;
+                product.EndOfShelfLife = _myUtils.ToDateOnly(request.EndOfShelfLife).Result;
                 product.Image = request.Image;
                 product.Location = request.Location;
-                product.LastCount = request.LastCount;
+                product.LastCount = _myUtils.ToDateOnly(DateTime.UtcNow).Result;
                 // product.Supplier = request.Supplier;
 
                 await _dbContext.SaveChangesAsync();

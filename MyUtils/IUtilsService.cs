@@ -8,5 +8,6 @@ namespace allinibp.Services
     public interface IUtilsService
     {
         public Task<string> RandomString(int StringLength);
+        public Task<DateOnly> ToDateOnly(DateTime date);
     }
 }
