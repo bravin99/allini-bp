@@ -7,16 +7,21 @@ namespace allinibp.Services
     public class ProductService : IProductService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IUtilsService _myUtils;
 
-        public ProductService(ApplicationDbContext dbContext)
+        public ProductService(ApplicationDbContext dbContext, IUtilsService myUtils)
         {
             _dbContext = dbContext;
+            _myUtils = myUtils;
         }
 
         public async Task<string> CreateProduct(ProductDto request)
         {
+            var skuString = _myUtils.RandomString(7).Result;
+
             Product NewProduct = new Product()
             {
+                Sku = skuString,
                 BarCode = request.BarCode,
                 Name = request.Name,
                 Quantity = request.Quantity,

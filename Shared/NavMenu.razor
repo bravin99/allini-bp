@@ -1,7 +1,9 @@
 ﻿<MudNavMenu>
     <MudNavLink Href="/dashboard" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-    <MudNavLink Href="/categories" Match="NavLinkMatch.All">Categories</MudNavLink>
-    <MudNavLink Href="/products" Match="NavLinkMatch.Prefix">Products</MudNavLink>
+    <MudNavGroup Title="Products" Expanded="true">
+        <MudNavLink Href="/categories"  Match="NavLinkMatch.Prefix">Categories</MudNavLink>
+        <MudNavLink Href="/products"  Match="NavLinkMatch.Prefix">Products</MudNavLink>
+    </MudNavGroup>
     <MudNavLink Href="/suppliers" Match="NavLinkMatch.Prefix">Suppliers</MudNavLink>
     <MudNavLink Href="/sales" Match="NavLinkMatch.Prefix">Sales</MudNavLink>
     <MudNavLink Href="/stock" Match="NavLinkMatch.Prefix">Stock</MudNavLink>
