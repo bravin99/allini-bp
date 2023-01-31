@@ -24,6 +24,7 @@ namespace allinibp.Services
                 Sku = skuString,
                 BarCode = request.BarCode,
                 Name = request.Name,
+                Category = request.Category,
                 Quantity = request.Quantity,
                 MinimumStock = request.MinimumStock,
                 SafetyStock = request.SafetyStock,
@@ -34,9 +35,9 @@ namespace allinibp.Services
                 Location = request.Location,
                 LastCount = request.LastCount,
             };
-            var category = await _dbContext.Categories!.FirstOrDefaultAsync(c => c.Name == request.Category);
-            if (category != null)
-                NewProduct.Category = category;
+            // var category = await _dbContext.Categories!.FirstOrDefaultAsync(c => c.Id == request.CategoryId);
+            // if (category != null)
+            //     NewProduct.Category = category;
 
             await _dbContext.Products!.AddAsync(NewProduct);
             await _dbContext.SaveChangesAsync();

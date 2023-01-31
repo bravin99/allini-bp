@@ -20,7 +20,7 @@ namespace allinibp.Data.Models
         public string BarCode { get; set; } = string.Empty;
         [Required]
         public string Name { get; set; } = string.Empty;
-        public string? Category { get; set; }
+        public Category? Category { get; set; }
         [Required]
         public double Quantity { get; set; }
         // minimum stock: reoder point
