@@ -25,8 +25,8 @@
                     <MudNumericField @bind-Value="ProductDto.SalesPrice" Label="Sales Price" Variant="Variant.Text" Min="0" Class="mt-3" />
                     @* <MudDatePicker Label="End Of Shelf Life" Editable="true" @bind-Date="ProductDto.EndOfShelfLife" Mask="@(new DateMask("dd.MM.yyyy"))"
                         DateFormat="dd.MM.yyyy" Placeholder="de-AT Date" PickerVariant="PickerVariant.Dialog" Class="mt-3" /> *@
-                    <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="End Of Shelf Life" HelperText="For custom cultures" 
-                        DateFormat="dd/MM/yyyy" @bind-Value="ProductDto.EndOfShelfLife" Class="mt-3" />
+                    <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="End Of Shelf Life" HelperText="Default is 24 months from now" 
+                        @bind-Date="EndOfLifeDate" Class="mt-3" Color="Color.Success" />
                     <MudSelect @bind-Value="ProductDto.Location" Label="Select Location" HelperText="Current location of the product" Class="mt-3">
                         @foreach (Location item in Enum.GetValues(typeof(Location)))
                         {
@@ -64,6 +64,7 @@
     [Parameter] public EventCallback OnValidSubmit { get; set; }
     [Parameter] public bool success { get; set; } = false;
     [Parameter] public string ButtonTxt { get; set; } = "Create";
+    [Parameter] public DateTime? EndOfLifeDate { get; set; }
     [Parameter] public Category[]? categories { get; set; }
     [Parameter] public string? CreateResponse { get; set; }
     private string? stringValue { get; set; }

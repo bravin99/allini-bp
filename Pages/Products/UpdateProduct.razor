@@ -1,0 +1,72 @@
+@page "/products/{Id:int}/update"
+@inject IProductService ProductService
+@inject ICategoryService CategoryService
+@inject NavigationManager NavigationManager
+
+@if (ProductToEdit != null)
+{
+    <PageTitle>Update Product Page: @ProductToEdit.Name</PageTitle>
+    <MudContainer>
+        <ProductForm ProductDto="ProductDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="categories" EndOfLifeDate="EndOfLifeDate" ButtonTxt="Update Product" />
+    </MudContainer>
+}
+else
+{
+    <PageTitle>Update Product Page</PageTitle>
+    <MudAlert Severity="Severity.Warning">Please select a valid product to update</MudAlert>
+
+    <MudButton Class="mt-5" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.SkipPrevious" Color="Color.Tertiary" @onclick="GoBack" aria-label="Go back">Go Back</MudButton>
+}
+
+@code
+{
+    [Parameter] public int Id { get; set; }
+    public ProductDto ProductDto = new ProductDto();
+    public Product? ProductToEdit;
+    public Category[]? categories;
+    public DateTime? EndOfLifeDate;
+    public string? Response;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCategories();
+        await GetProduct();
+
+        if (ProductToEdit != null)
+        {
+            ProductDto.BarCode = ProductToEdit.BarCode;
+            ProductDto.Name = ProductToEdit.Name;
+            ProductDto.Category = ProductToEdit.Category;
+            ProductDto.Quantity = ProductToEdit.Quantity;
+            ProductDto.MinimumStock = ProductToEdit.MinimumStock;
+            ProductDto.SafetyStock = ProductToEdit.SafetyStock;
+            ProductDto.Cost = ProductToEdit.Cost;
+            ProductDto.SalesPrice = ProductToEdit.SalesPrice;
+            EndOfLifeDate = (ProductToEdit.EndOfShelfLife!.Value).ToDateTime(TimeOnly.Parse("10:00 PM"));
+            ProductDto.Location = ProductToEdit.Location;
+        }
+    }
+
+    public async Task GetCategories()
+    {
+        categories = await CategoryService.GetCategories()!;
+    }
+
+    public async Task GetProduct()
+    {
+        ProductToEdit = await ProductService.GetProduct(Id)!;
+    }
+
+    private async Task OnValidSubmit()
+    {
+        ProductDto.EndOfShelfLife = EndOfLifeDate.GetValueOrDefault();
+        Response = await ProductService.UpdateProduct(Id, ProductDto);
+        GoBack();
+    }
+
+    public void GoBack()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+
+}
