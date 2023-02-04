@@ -1,4 +1,5 @@
 @page "/suppliers"
+@inject ISupplierService SupplierService
 @inject NavigationManager NavigationManager
 
 <PageTitle>Suppliers</PageTitle>
@@ -16,7 +17,7 @@
             <MudTh>Name</MudTh>
             <MudTh>Email</MudTh>
             <MudTh>PhoneNumber</MudTh>
-            <MudTh>Active</MudTh>
+            <MudTh>Active Status</MudTh>
             <MudTh>Inception Date</MudTh>
             <MudTh>Actions</MudTh>
         </HeaderContent>
@@ -24,7 +25,10 @@
             <MudTd DataLabel="Products Count">@context.Name</MudTd>
             <MudTd DataLabel="Name">@context.Email</MudTd>
             <MudTd DataLabel="Products Count">@context.PhoneNumber</MudTd>
-            <MudTd DataLabel="Display">@context.Active ? "Yes" : "No"</MudTd>
+            <MudTd DataLabel="Display">
+                @if (context.Active){<MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Title="Active" />}
+                else{<MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" Title="Inactive" />}
+            </MudTd>
             <MudTd DataLabel="Display">@context.InceptionDate</MudTd>
             <MudTd DataLabel="Actions">
                 <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Tertiary" aria-label="edit" Title="Edit"></MudIconButton>
@@ -55,7 +59,18 @@
             return true;
         return false;
     }
-    private void NavToCreate()
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetSupplierList();
+    }
+
+    async Task GetSupplierList()
+    {
+        SupplierList = await SupplierService.GetSuppliers()!;
+    }
+
+    void NavToCreate()
     {
         NavigationManager.NavigateTo("/suppliers/create");
     }

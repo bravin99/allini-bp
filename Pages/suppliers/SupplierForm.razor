@@ -4,12 +4,14 @@
         <MudItem xs="12" sm="7">
             <MudCard>
                 <MudCardContent>
-                    <MudTextField Label="Name" HelperText="Max. 12 characters"
-                                @bind-Value="SupplierDto.Name" For="@(() => SupplierDto!.Name)" Counter="12" Immediate="true" />
-                    
+                    <MudTextField Label="Name" @bind-Value="SupplierDto.Name" For="@(() => SupplierDto!.Name)" Class="mt-3" />
+                    <MudTextField  InputMode="InputMode.email" InputType="InputType.Email" Label="Email" @bind-Value="SupplierDto.Email" For="@(() => SupplierDto!.Email)" Class="mt-3" />
+                    <MudTextField InputMode="InputMode.tel" InputType="InputType.Telephone" Label="Phone Number" @bind-Value="SupplierDto.PhoneNumber" For="@(() => SupplierDto!.PhoneNumber)" Class="mt-3" />
+                    <MudSwitch @bind-Checked="@SupplierDto.Active" Label="Active" Color="Color.Success" Class="mt-3" />
+                    <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="Inception Date" HelperText="When did you start working together? Default is today" @bind-Date="@InceptionDate" Class="mt-3" />
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mx-auto">@ButtonTxt</MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mx-auto mb-2">@ButtonTxt</MudButton>
                 </MudCardActions>
             </MudCard>
         </MudItem>
@@ -38,4 +40,5 @@
     [Parameter] public bool success { get; set; } = false;
     [Parameter] public string CreateResponse { get; set; } = string.Empty;
     [Parameter] public string ButtonTxt { get; set; } = "Create Supplier";
+    [Parameter] public DateTime? InceptionDate { get; set; }
 }

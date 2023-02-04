@@ -5,15 +5,27 @@
 <PageTitle>Create A New Supplier</PageTitle>
 
 <MudContainer>
-    <SupplierForm ProductDto="ProductDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="categories" ButtonTxt="Create Supplier" />
+    <SupplierForm SupplierDto="SupplierDto" success="success" OnValidSubmit="OnValidSubmit" CreateResponse="Response" ButtonTxt="Create Supplier" InceptionDate="InceptionDate" />
 </MudContainer>
 
 @code
 {
+    public SupplierDto SupplierDto = new SupplierDto();
+    public DateTime? InceptionDate;
+    public bool success;
     public string Response = "No response grabbed";
+
     private async Task OnValidSubmit()
     {
-        Response = "returned";
+        SupplierDto.InceptionDate = InceptionDate??DateTime.UtcNow;
+        Response = await SupplierService.CreateSupplier(SupplierDto);
+        success = true;
+        GoToSuppliers();
+    }
+
+    private void GoToSuppliers()
+    {
+        NavigationManager.NavigateTo("/suppliers");
     }
 
 }

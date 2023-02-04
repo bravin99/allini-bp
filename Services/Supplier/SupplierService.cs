@@ -15,9 +15,26 @@ namespace allinibp.Services
             _myUtils = myUtils;
         }
 
-        public Task<string> CreateSupplier(SupplierDto request)
+        public async Task<string> CreateSupplier(SupplierDto request)
         {
-            throw new NotImplementedException();
+            var SupplierExists = await _dbContext.Suppliers!.FirstOrDefaultAsync(s => s.Email == request.Email);
+            if (SupplierExists != null)
+                {return "Creation proocess stopped! Supplier already exists";}
+            else
+            {
+                Supplier NewSupplier = new Supplier(){
+                    Name = request.Name,
+                    Email = request.Email,
+                    PhoneNumber = request.PhoneNumber,
+                    Active = request.Active,
+                    InceptionDate = request.InceptionDate,
+                };
+
+                await _dbContext.Suppliers!.AddAsync(NewSupplier);
+                await _dbContext.SaveChangesAsync();
+
+                return "Supplier created!";
+            }
         }
 
         public Task<string> DeleteSupplier(int Id)
@@ -30,9 +47,10 @@ namespace allinibp.Services
             throw new NotImplementedException();
         }
 
-        public Task<Supplier[]>? GetSuppliers()
+        public async Task<Supplier[]>? GetSuppliers()
         {
-            throw new NotImplementedException();
+            var SupplierList = await _dbContext.Suppliers!.ToArrayAsync();
+            return SupplierList != null ? SupplierList : null!; 
         }
 
         public Task<string> UpdateSupplier(int Id, SupplierDto request)
