@@ -1,0 +1,19 @@
+@page "/suppliers/create"
+@inject ISupplierService SupplierService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create A New Supplier</PageTitle>
+
+<MudContainer>
+    <SupplierForm ProductDto="ProductDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="categories" ButtonTxt="Create Supplier" />
+</MudContainer>
+
+@code
+{
+    public string Response = "No response grabbed";
+    private async Task OnValidSubmit()
+    {
+        Response = "returned";
+    }
+
+}

@@ -1,0 +1,41 @@
+<EditForm Model="@SupplierDto" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Name" HelperText="Max. 12 characters"
+                                @bind-Value="SupplierDto.Name" For="@(() => SupplierDto!.Name)" Counter="12" Immediate="true" />
+                    
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mx-auto">@ButtonTxt</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="5">
+            <MudPaper Class="pa-4 mud-height-full">
+                <MudText Typo="Typo.subtitle2">Validation Summary</MudText>
+                @if (success)
+                {
+                    <MudText Color="Color.Success">@CreateResponse</MudText>
+                }
+                else
+                {
+                    <MudText Color="@Color.Error">
+                        <ValidationSummary />
+                    </MudText>
+                }
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+@code
+{
+    [Parameter] public SupplierDto SupplierDto { get; set; } = new SupplierDto();
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public bool success { get; set; } = false;
+    [Parameter] public string CreateResponse { get; set; } = string.Empty;
+    [Parameter] public string ButtonTxt { get; set; } = "Create Supplier";
+}

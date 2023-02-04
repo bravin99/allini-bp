@@ -23,8 +23,6 @@
                     <MudNumericField @bind-Value="ProductDto.SafetyStock" Label="Safety Stock" Variant="Variant.Text" Min="0" Class="mt-3" />
                     <MudNumericField @bind-Value="ProductDto.Cost" Label="Cost" Variant="Variant.Text" Min="0" Class="mt-3" />
                     <MudNumericField @bind-Value="ProductDto.SalesPrice" Label="Sales Price" Variant="Variant.Text" Min="0" Class="mt-3" />
-                    @* <MudDatePicker Label="End Of Shelf Life" Editable="true" @bind-Date="ProductDto.EndOfShelfLife" Mask="@(new DateMask("dd.MM.yyyy"))"
-                        DateFormat="dd.MM.yyyy" Placeholder="de-AT Date" PickerVariant="PickerVariant.Dialog" Class="mt-3" /> *@
                     <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="End Of Shelf Life" HelperText="Default is 24 months from now" 
                         @bind-Date="EndOfLifeDate" Class="mt-3" Color="Color.Success" />
                     <MudSelect @bind-Value="ProductDto.Location" Label="Select Location" HelperText="Current location of the product" Class="mt-3">
