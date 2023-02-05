@@ -51,7 +51,7 @@ namespace allinibp.Services
         public async Task<Supplier[]>? GetSuppliers()
         {
             var SupplierList = await _dbContext.Suppliers!.ToArrayAsync();
-            return SupplierList != null ? SupplierList : null!; 
+            return SupplierList != null ? SupplierList : null!;
         }
 
         public async Task<string> UpdateSupplier(int Id, SupplierDto request)
@@ -66,7 +66,7 @@ namespace allinibp.Services
                 supplier.InceptionDate = request.InceptionDate;
 
                 await _dbContext.SaveChangesAsync();
-                return "Upate to supplier was successful";
+                return "Update to supplier was successful";
             }
             return "An error occured while performing the supplier update";
         }

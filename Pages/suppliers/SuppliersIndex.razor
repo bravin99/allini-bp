@@ -6,7 +6,7 @@
 
 <MudContainer>
     <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Tertiary" @onclick="NavToCreate" Class="m-2">Create Supplier</MudButton>
-    
+
     @if (SupplierList != null)
     {
         <MudTable Items="@SupplierList" Dense="false" Hover="true" Bordered="false" Striped="false" Filter="new Func<Supplier,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Class="mt-5 mb-3">
@@ -33,7 +33,7 @@
                 </MudTd>
                 <MudTd DataLabel="Display">@context.InceptionDate</MudTd>
                 <MudTd DataLabel="Actions">
-                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Tertiary" aria-label="edit" Title="Edit"></MudIconButton>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Tertiary" aria-label="edit" Title="Edit" @onclick="@(() => NavigationManager.NavigateTo($"/suppliers/{@context.Id}/edit"))"></MudIconButton>
                     <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" Title="Delete"></MudIconButton>
                 </MudTd>
             </RowTemplate>

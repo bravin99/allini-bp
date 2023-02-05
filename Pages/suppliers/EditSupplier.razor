@@ -1,0 +1,64 @@
+@page "/suppliers/{Id:int}/edit"
+@inject ISupplierService SupplierService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+
+@if (SupplierToEdit != null)
+{
+    <PageTitle> Edit: @SupplierToEdit.Name </PageTitle>
+
+    <MudContainer>
+        <SupplierForm SupplierDto="SupplierDto" success="success" OnValidSubmit="OnValidSubmit" CreateResponse="Response" ButtonTxt="Update Supplier" InceptionDate="InceptionDate" />
+    </MudContainer>
+}
+else
+{
+    <PageTitle>Edit Supplier page: SUPPLIER NOT FOUND</PageTitle>
+    <MudContainer>
+        <MudAlert Severity="Severity.Info">No Supplier with Id: @Id, exists</MudAlert>
+
+        <MudButton Class="mt-3" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Tertiary" aria-label="Go back">Suppliers</MudButton>
+    </MudContainer>
+}
+
+@code
+{
+    [Parameter] public int Id { get; set; }
+    public SupplierDto SupplierDto = new SupplierDto();
+    public Supplier? SupplierToEdit = new Supplier();
+    public bool success;
+    public string Response = string.Empty;
+    public DateTime? InceptionDate;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetSupplierById();
+    }
+
+    private async Task GetSupplierById()
+    {
+        SupplierToEdit = await SupplierService.GetSupplierById(Id)!;
+        if (SupplierToEdit != null)
+        {
+            InceptionDate = SupplierToEdit.InceptionDate != null ? SupplierToEdit.InceptionDate : DateTime.UtcNow;
+            SupplierDto.Name = SupplierToEdit.Name;
+            SupplierDto.Email = SupplierToEdit.Email;
+            SupplierDto.PhoneNumber = SupplierToEdit.PhoneNumber;
+            SupplierDto.Active = SupplierToEdit.Active;
+        }
+    }
+
+    private async Task OnValidSubmit()
+    {
+        SupplierDto.InceptionDate = InceptionDate.HasValue ? InceptionDate.Value : default(DateTime);
+        Response = await SupplierService.UpdateSupplier(Id, SupplierDto);
+        success = true;
+        Snackbar.Add(Response);
+        GoToSuppliers();
+    }
+
+    private void GoToSuppliers()
+    {
+        NavigationManager.NavigateTo("/suppliers");
+    }
+}
