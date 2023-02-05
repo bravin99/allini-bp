@@ -6,39 +6,46 @@
 
 <MudContainer>
     <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Tertiary" @onclick="NavToCreate" Class="m-2">Create Supplier</MudButton>
-
-    <MudTable Items="@SupplierList" Dense="false" Hover="true" Bordered="false" Striped="false" Filter="new Func<Supplier,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Class="mt-5 mb-3">
-        <ToolBarContent>
-            <MudText Typo="Typo.h6">My Supplier List</MudText>
-            <MudSpacer />
-            <MudTextField @bind-Value="SearchParam" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-        </ToolBarContent>
-        <HeaderContent>
-            <MudTh>Name</MudTh>
-            <MudTh>Email</MudTh>
-            <MudTh>PhoneNumber</MudTh>
-            <MudTh>Active Status</MudTh>
-            <MudTh>Inception Date</MudTh>
-            <MudTh>Actions</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Products Count">@context.Name</MudTd>
-            <MudTd DataLabel="Name">@context.Email</MudTd>
-            <MudTd DataLabel="Products Count">@context.PhoneNumber</MudTd>
-            <MudTd DataLabel="Display">
-                @if (context.Active){<MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Title="Active" />}
-                else{<MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" Title="Inactive" />}
-            </MudTd>
-            <MudTd DataLabel="Display">@context.InceptionDate</MudTd>
-            <MudTd DataLabel="Actions">
-                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Tertiary" aria-label="edit" Title="Edit"></MudIconButton>
-                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" Title="Delete"></MudIconButton>
-            </MudTd>
-        </RowTemplate>
-        <PagerContent>
-            <MudTablePager />
-        </PagerContent>
-    </MudTable>
+    
+    @if (SupplierList != null)
+    {
+        <MudTable Items="@SupplierList" Dense="false" Hover="true" Bordered="false" Striped="false" Filter="new Func<Supplier,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Class="mt-5 mb-3">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">My Supplier List</MudText>
+                <MudSpacer />
+                <MudTextField @bind-Value="SearchParam" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Email</MudTh>
+                <MudTh>PhoneNumber</MudTh>
+                <MudTh>Active Status</MudTh>
+                <MudTh>Inception Date</MudTh>
+                <MudTh>Actions</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Products Count">@context.Name</MudTd>
+                <MudTd DataLabel="Name">@context.Email</MudTd>
+                <MudTd DataLabel="Products Count">@context.PhoneNumber</MudTd>
+                <MudTd DataLabel="Display">
+                    @if (context.Active){<MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Title="Active" />}
+                    else{<MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" Title="Inactive" />}
+                </MudTd>
+                <MudTd DataLabel="Display">@context.InceptionDate</MudTd>
+                <MudTd DataLabel="Actions">
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Tertiary" aria-label="edit" Title="Edit"></MudIconButton>
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" Title="Delete"></MudIconButton>
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
+    }
+    else
+    {
+        <MudProgressLinear Color="Color.Success" Indeterminate="true" Class="my-7" />
+    }
 </MudContainer>
 
 @code

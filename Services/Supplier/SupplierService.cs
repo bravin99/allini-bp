@@ -42,9 +42,10 @@ namespace allinibp.Services
             throw new NotImplementedException();
         }
 
-        public Task<Supplier>? GetSupplierById(int Id)
+        public async Task<Supplier>? GetSupplierById(int Id)
         {
-            throw new NotImplementedException();
+            var supplier = await _dbContext.Suppliers!.FirstOrDefaultAsync(s => s.Id == Id);
+            return supplier != null ? supplier : null!;
         }
 
         public async Task<Supplier[]>? GetSuppliers()
@@ -53,9 +54,21 @@ namespace allinibp.Services
             return SupplierList != null ? SupplierList : null!; 
         }
 
-        public Task<string> UpdateSupplier(int Id, SupplierDto request)
+        public async Task<string> UpdateSupplier(int Id, SupplierDto request)
         {
-            throw new NotImplementedException();
+            var supplier = await GetSupplierById(Id)!;
+            if (supplier != null)
+            {
+                supplier.Name = request.Name;
+                supplier.Email = request.Email;
+                supplier.PhoneNumber = request.PhoneNumber;
+                supplier.Active = request.Active;
+                supplier.InceptionDate = request.InceptionDate;
+
+                await _dbContext.SaveChangesAsync();
+                return "Upate to supplier was successful";
+            }
+            return "An error occured while performing the supplier update";
         }
     }
 }
