@@ -3,13 +3,13 @@
 @inject ICategoryService CategoryService
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
-@inject IJSRuntime Js
 
 <PageTitle>Dashboard</PageTitle>
 
 <MudContainer>
     <MudPaper Class="pa-4">
-        <MudChart ChartType="ChartType.Pie" InputData="@ProductQuantity" @bind-SelectedIndex="StartingIndex" InputLabels="@ProductName" Width="300px" Height="300px" />
+        <MudText Class="pb-5 text-center">Products In Stock Represantation</MudText>
+        <MudChart ChartType="ChartType.Pie" InputData="@ProductQuantity" @bind-SelectedIndex="StartingIndex" InputLabels="@ProductName" Width="300px" Height="300px" ChartTitle="Hello" />
     </MudPaper>
 </MudContainer>
 
@@ -17,8 +17,8 @@
 {
     private int StartingIndex = -1;
     public Product[]? ProductList;
-    double[]? ProductQuantity;
-    string[]? ProductName;
+    private double[] ProductQuantity {get; set; }
+    private string[] ProductName {get; set;}
 
     protected async override Task OnInitializedAsync()
     {
@@ -28,6 +28,13 @@
     private async Task GetProductsData()
     {
         ProductList = await ProductService.GetProducts()!;
+        ProductQuantity = ProductList.Select(q => q.Quantity).ToArray();
+        ProductName = ProductList.Select(n => n.Name).ToArray();
     }
+
+    @* private void SplitProductArra()
+    {
+
+    } *@
     
 }
