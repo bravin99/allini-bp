@@ -1,7 +1,33 @@
 ﻿@page "/"
 @page "/dashboard"
+@inject ICategoryService CategoryService
+@inject IProductService ProductService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime Js
+
 <PageTitle>Dashboard</PageTitle>
 
-<h1>Hello, world!</h1>
+<MudContainer>
+    <MudPaper Class="pa-4">
+        <MudChart ChartType="ChartType.Pie" InputData="@ProductQuantity" @bind-SelectedIndex="StartingIndex" InputLabels="@ProductName" Width="300px" Height="300px" />
+    </MudPaper>
+</MudContainer>
 
-<h2>Welcome to my new app.</h2>
+@code
+{
+    private int StartingIndex = -1;
+    public Product[]? ProductList;
+    double[]? ProductQuantity;
+    string[]? ProductName;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await GetProductsData();
+    }
+
+    private async Task GetProductsData()
+    {
+        ProductList = await ProductService.GetProducts()!;
+    }
+    
+}
