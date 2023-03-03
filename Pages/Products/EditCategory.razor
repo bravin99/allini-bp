@@ -1,6 +1,7 @@
 @page "/categories/{id:int}/edit"
 @inject ICategoryService CategoryService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 @if (CategoryToEdit != null)
 {

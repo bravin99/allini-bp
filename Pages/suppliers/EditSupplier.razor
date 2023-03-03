@@ -2,6 +2,7 @@
 @inject ISupplierService SupplierService
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
+@attribute [Authorize]
 
 @if (SupplierToEdit != null)
 {

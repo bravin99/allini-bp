@@ -10,7 +10,7 @@ namespace allinibp.Services
         private static Random rand = new Random();
         public Task<string> RandomString(int StringLength)
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
 
             var randString = new string(Enumerable.Repeat(chars, StringLength).Select(s => s[rand.Next(s.Length)]).ToArray());
 
