@@ -10,7 +10,14 @@
 <MudContainer>
     <MudPaper Class="pa-4">
         <MudText Class="pb-5 text-center">Products In Stock Represantation</MudText>
-        <MudChart ChartType="ChartType.Pie" InputData="@ProductQuantity" @bind-SelectedIndex="StartingIndex" InputLabels="@ProductName" Width="300px" Height="300px" ChartTitle="Hello" />
+            @if (ProductList != null && ProductList.Count() > 0)
+            {
+                <MudChart ChartType="ChartType.Pie" InputData="@ProductQuantity" @bind-SelectedIndex="StartingIndex" InputLabels="@ProductName" Width="300px" Height="300px" ChartTitle="Hello" />
+            }
+            else
+            {
+                <MudAlert Severity="Severity.Info">You have not added any products.</MudAlert>
+            }
     </MudPaper>
 </MudContainer>
 
