@@ -91,7 +91,7 @@
         {
             var result = await CategoryService.DeleteCategory(c.Id);
             StateHasChanged();
-            await GetCategoryList();
+            await OnInitializedAsync();
         }
     }
 
