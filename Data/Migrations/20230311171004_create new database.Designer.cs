@@ -12,8 +12,8 @@ using allinibp.Data;
 namespace allinibp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230128160236_ProductsModel")]
-    partial class ProductsModel
+    [Migration("20230311171004_create new database")]
+    partial class createnewdatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -233,14 +233,23 @@ namespace allinibp.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("Display")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("character varying(45)");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -255,6 +264,9 @@ namespace allinibp.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<double?>("AdjustedCount")
+                        .HasColumnType("double precision");
+
                     b.Property<string>("BarCode")
                         .IsRequired()
                         .HasColumnType("text");
@@ -265,15 +277,15 @@ namespace allinibp.Data.Migrations
                     b.Property<double>("Cost")
                         .HasColumnType("double precision");
 
-                    b.Property<DateTime?>("EndOfShelfLife")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly?>("EndOfShelfLife")
+                        .HasColumnType("date");
 
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("LastCount")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("LastCount")
+                        .HasColumnType("date");
 
                     b.Property<int>("Location")
                         .HasColumnType("integer");
@@ -313,7 +325,7 @@ namespace allinibp.Data.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("allinibp.Data.Models.Suppliers.Supplier", b =>
+            modelBuilder.Entity("allinibp.Data.Models.Supplier", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -341,7 +353,7 @@ namespace allinibp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Supplier");
+                    b.ToTable("Suppliers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -397,20 +409,22 @@ namespace allinibp.Data.Migrations
 
             modelBuilder.Entity("allinibp.Data.Models.Product", b =>
                 {
-                    b.HasOne("allinibp.Data.Models.Category", null)
-                        .WithMany("Proucts")
+                    b.HasOne("allinibp.Data.Models.Category", "Category")
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId");
 
-                    b.HasOne("allinibp.Data.Models.Suppliers.Supplier", "Supplier")
+                    b.HasOne("allinibp.Data.Models.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierId");
+
+                    b.Navigation("Category");
 
                     b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("allinibp.Data.Models.Category", b =>
                 {
-                    b.Navigation("Proucts");
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
