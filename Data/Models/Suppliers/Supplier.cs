@@ -11,6 +11,7 @@ namespace allinibp.Data.Models
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
+        public IList<Product>? Products { get; set; }
         public bool Active { get; set; } = true;
         public DateTime InceptionDate { get; set; }
     }

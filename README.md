@@ -1,4 +1,6 @@
-...
+# Alini Business Platform
+
+![tease view](wwwroot/images/screenshot1.png)
 
 ## Set User Secrets
 

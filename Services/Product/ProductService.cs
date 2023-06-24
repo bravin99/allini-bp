@@ -19,7 +19,7 @@ namespace allinibp.Services
         {
             var skuString = _myUtils.RandomString(7).Result;
 
-            Product NewProduct = new Product()
+            Product newProduct = new Product()
             {
                 Sku = skuString,
                 BarCode = request.BarCode,
@@ -40,7 +40,7 @@ namespace allinibp.Services
             // if (category != null)
             //     NewProduct.Category = category;
 
-            await _dbContext.Products!.AddAsync(NewProduct);
+            await _dbContext.Products!.AddAsync(newProduct);
             await _dbContext.SaveChangesAsync();
             return "Product created";
         }
@@ -59,14 +59,14 @@ namespace allinibp.Services
 
         public async Task<Product>? GetProduct(int Id)
         {
-            var product = await _dbContext.Products!.Include(p => p.Supplier).FirstOrDefaultAsync(p => p.Id == Id);
-            return product == null ? null! : product;
+            var product = await _dbContext.Products!.Include(p => p.Suppliers).FirstOrDefaultAsync(p => p.Id == Id);
+            return product!;
         }
 
         public async Task<Product[]>? GetProducts()
         {
             var products = await _dbContext.Products!.ToArrayAsync();
-            return products != null ? products : null!;
+            return products!;
         }
 
         public async Task<string> UpdateProduct(int Id, ProductDto request)
