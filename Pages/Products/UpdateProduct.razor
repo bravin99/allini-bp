@@ -8,7 +8,10 @@
 {
     <PageTitle>Update Product Page: @ProductToEdit.Name</PageTitle>
     <MudContainer>
-        <ProductForm ProductDto="ProductDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="categories" EndOfLifeDate="EndOfLifeDate" ButtonTxt="Update Product" />
+        <MudPaper Class="mb-5" Elevation="0">
+            <h1 class="text-center">Update Product: @ProductToEdit.Name</h1>
+        </MudPaper>
+        <ProductForm ProductDto="ProductDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="categories" ButtonTxt="Update Product"/>
     </MudContainer>
 }
 else
@@ -25,7 +28,6 @@ else
     public ProductDto ProductDto = new ProductDto();
     public Product? ProductToEdit;
     public Category[]? categories;
-    public DateTime? EndOfLifeDate;
     public string? Response;
 
     protected override async Task OnInitializedAsync()
@@ -43,7 +45,7 @@ else
             ProductDto.SafetyStock = ProductToEdit.SafetyStock;
             ProductDto.Cost = ProductToEdit.Cost;
             ProductDto.SalesPrice = ProductToEdit.SalesPrice;
-            EndOfLifeDate = (ProductToEdit.EndOfShelfLife!.Value).ToDateTime(TimeOnly.Parse("10:00 PM"));
+            ProductDto.EndOfShelfLife = ProductToEdit.EndOfShelfLife; //(ProductToEdit.EndOfShelfLife!.Value).ToDateTime(TimeOnly.Parse("10:00 PM"))
             ProductDto.Location = ProductToEdit.Location;
         }
     }
@@ -60,7 +62,6 @@ else
 
     private async Task OnValidSubmit()
     {
-        ProductDto.EndOfShelfLife = EndOfLifeDate.GetValueOrDefault();
         Response = await ProductService.UpdateProduct(Id, ProductDto);
         GoBack();
     }

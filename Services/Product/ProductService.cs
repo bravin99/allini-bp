@@ -31,7 +31,7 @@ namespace allinibp.Services
                 SafetyStock = request.SafetyStock,
                 Cost = request.Cost,
                 SalesPrice = request.SalesPrice,
-                EndOfShelfLife = _myUtils.ToDateOnly(request.EndOfShelfLife).Result,
+                EndOfShelfLife = DateTime.SpecifyKind((DateTime)request.EndOfShelfLife!, DateTimeKind.Utc),
                 Image = request.Image,
                 Location = request.Location,
                 LastCount = _myUtils.ToDateOnly(DateTime.UtcNow).Result,
@@ -81,7 +81,7 @@ namespace allinibp.Services
                 product.SafetyStock = request.SafetyStock;
                 product.Cost = request.Cost;
                 product.SalesPrice = request.SalesPrice;
-                product.EndOfShelfLife = _myUtils.ToDateOnly(request.EndOfShelfLife).Result;
+                product.EndOfShelfLife = DateTime.SpecifyKind((DateTime)request.EndOfShelfLife!, DateTimeKind.Utc);
                 product.Image = request.Image;
                 product.Location = request.Location;
                 product.LastCount = _myUtils.ToDateOnly(DateTime.UtcNow).Result;

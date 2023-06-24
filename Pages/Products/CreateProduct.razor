@@ -7,7 +7,7 @@
 <PageTitle>Create A New Product</PageTitle>
 
 <MudContainer>
-    <ProductForm ProductDto="ProductDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="categories" EndOfLifeDate="EndOfLifeDate" ButtonTxt="Create Product" />
+    <ProductForm ProductDto="ProductDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="categories" ButtonTxt="Create Product" />
 </MudContainer>
 
 @code
@@ -17,7 +17,6 @@
     public Category category = new Category();
     public bool success = false;
     public string? Response { get; set; }
-    public DateTime? EndOfLifeDate = DateTime.UtcNow.AddMonths(24);
 
     protected override async Task OnInitializedAsync()
     {
@@ -31,7 +30,6 @@
 
     private async Task OnValidSubmit()
     {
-        ProductDto.EndOfShelfLife = EndOfLifeDate.GetValueOrDefault();
         Response = await ProductService.CreateProduct(ProductDto);
         ProductDto = new ProductDto();
         BackToProucts();

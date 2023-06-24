@@ -33,7 +33,7 @@ namespace allinibp.Data.Models
         // Cost of an Item including relevant taxes
         public double Cost { get; set; }
         public double SalesPrice { get; set; }
-        public DateOnly? EndOfShelfLife { get; set; }
+        public DateTime? EndOfShelfLife { get; set; }
         public string Image { get; set; } = string.Empty;
         public Location Location { get; set; } = Location.store;
         public DateTime Recieved { get; set; } = DateTime.UtcNow;

@@ -274,8 +274,8 @@ namespace allinibp.Data.Migrations
                     b.Property<double>("Cost")
                         .HasColumnType("double precision");
 
-                    b.Property<DateOnly?>("EndOfShelfLife")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("EndOfShelfLife")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Image")
                         .IsRequired()
