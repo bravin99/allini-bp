@@ -4,8 +4,8 @@
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
                     <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">
-                        You are not authorized to view this page. 
-                        Please <MudLink Href="Identity/Account/Login" Underline="Underline.Always" Color="Color.Inherit">login or register</MudLink> first before proceeding.
+                        You are not authorized to view this page.
+                        Please <MudLink Href="Identity/Account/Login" Underline="Underline.Always" Color="Color.Inherit">login or register</MudLink> to proceed.
                     </MudAlert>
                 </NotAuthorized>
             </AuthorizeRouteView>
