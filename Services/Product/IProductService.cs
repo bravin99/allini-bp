@@ -10,5 +10,6 @@ namespace allinibp.Services
         public Task<string> CreateProduct(ProductDto request);
         public Task<string> UpdateProduct(int Id, ProductDto request);
         public Task<string> DeleteProduct(int Id);
+        public Task<string> AddSupplier(int id, List<Supplier> suppliers);
     }
 }

@@ -18,23 +18,22 @@ namespace allinibp.Services
         public async Task<string> CreateSupplier(SupplierDto request)
         {
             var SupplierExists = await _dbContext.Suppliers!.FirstOrDefaultAsync(s => s.Email == request.Email);
-            if (SupplierExists != null)
-                {return "Creation proocess stopped! Supplier already exists";}
-            else
-            {
-                Supplier NewSupplier = new Supplier(){
-                    Name = request.Name,
-                    Email = request.Email,
-                    PhoneNumber = request.PhoneNumber,
-                    Active = request.Active,
-                    InceptionDate = request.InceptionDate,
-                };
+            
+            if (SupplierExists != null) return "Supplier already exists";
+           
+            Supplier newSupplier = new Supplier(){
+                Name = request.Name,
+                Email = request.Email,
+                PhoneNumber = request.PhoneNumber,
+                Active = request.Active,
+                InceptionDate = request.InceptionDate,
+            };
 
-                await _dbContext.Suppliers!.AddAsync(NewSupplier);
-                await _dbContext.SaveChangesAsync();
+            await _dbContext.Suppliers!.AddAsync(newSupplier);
+            await _dbContext.SaveChangesAsync();
 
-                return "Supplier created!";
-            }
+            return "Supplier created!";
+            
         }
 
         public Task<string> DeleteSupplier(int Id)

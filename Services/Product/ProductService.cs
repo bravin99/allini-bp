@@ -95,5 +95,23 @@ namespace allinibp.Services
             }
             return "Error trying to update product";
         }
+        
+        public async Task<string> AddSupplier(int id, List<Supplier> suppliers)
+        {
+            var product = await _dbContext.Products!.Include(
+                s => s.Suppliers).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (product == null) return "product does not exist";
+
+            foreach (var s in suppliers)
+            {
+                if (!(product.Suppliers!.Any(x => x.Id == s.Id))) 
+                    product.Suppliers!.Add(s);
+            }
+            await _dbContext.SaveChangesAsync();
+            
+            return "supplier added to product";
+        }
+        
     }
 }

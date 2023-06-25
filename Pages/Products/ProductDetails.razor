@@ -1,40 +1,41 @@
 @page "/products/{Id:int}/details"
 @attribute [Authorize]
 @inject IProductService ProductService
+@inject ISupplierService SupplierService
 @inject NavigationManager NavigationManager
 
-@if (PageProduct != null)
+@if (_pageProduct != null)
 {
-    <PageTitle>@PageProduct.Name</PageTitle>
+    <PageTitle>@_pageProduct.Name</PageTitle>
     
     <MudContainer>
         <MudPaper Class="mb-5" Elevation="1">
-            <MudText Typo="Typo.h3" Class="text-center">@PageProduct.Name</MudText>
+            <MudText Typo="Typo.h3" Class="text-center py-3">@_pageProduct.Name</MudText>
         </MudPaper>
         <MudPaper Class="mb-5" Elevation="0">
             <MudGrid Spacing="0">
                 <MudItem xs="12" sm="6">
                     <MudPaper Class="d-flex align-center justify-center mud-width-full py-0" Elevation="0">
                         <MudList Clickable="true" Dense="false" DisableGutters="false">
-                            <MudListItem> SKU: @PageProduct.Sku </MudListItem>
-                            <MudListItem> Barcode: @PageProduct.BarCode </MudListItem>
-                            <MudListItem> Name: @PageProduct.Name </MudListItem>
-                            <MudListItem> Category: @PageProduct.Category.Name </MudListItem>
-                            <MudListItem> Quantity: @PageProduct.Quantity </MudListItem>
-                            <MudListItem> End Of Shelf Life: @PageProduct.EndOfShelfLife </MudListItem>
-                            <MudListItem> Location: In @PageProduct.Location </MudListItem>
+                            <MudListItem> SKU: @_pageProduct.Sku </MudListItem>
+                            <MudListItem> Barcode: @_pageProduct.BarCode </MudListItem>
+                            <MudListItem> Name: @_pageProduct.Name </MudListItem>
+                            <MudListItem> Category: @_pageProduct.Category.Name </MudListItem>
+                            <MudListItem> Quantity: @_pageProduct.Quantity </MudListItem>
+                            <MudListItem> End Of Shelf Life: @_pageProduct.EndOfShelfLife </MudListItem>
+                            <MudListItem> Location: In @_pageProduct.Location </MudListItem>
                         </MudList>
                     </MudPaper>
                 </MudItem>
                 <MudItem xs="12" sm="6">
                     <MudPaper Class="d-flex align-center justify-start mud-width-full py-0" Elevation="0">
                         <MudList Clickable="true" Dense="false" DisableGutters="false">
-                            <MudListItem> Cost: @PageProduct.Cost </MudListItem>
-                            <MudListItem> Sales Price: @PageProduct.SalesPrice </MudListItem>
-                            <MudListItem> Minimum Stock: @PageProduct.MinimumStock </MudListItem>
-                            <MudListItem> Safety Stock: @PageProduct.SafetyStock </MudListItem>
-                            <MudListItem> Received: @PageProduct.Recieved </MudListItem>
-                            <MudListItem> Last Updated: @PageProduct.LastCount </MudListItem>
+                            <MudListItem> Cost: @_pageProduct.Cost </MudListItem>
+                            <MudListItem> Sales Price: @_pageProduct.SalesPrice </MudListItem>
+                            <MudListItem> Minimum Stock: @_pageProduct.MinimumStock </MudListItem>
+                            <MudListItem> Safety Stock: @_pageProduct.SafetyStock </MudListItem>
+                            <MudListItem> Received: @_pageProduct.Recieved </MudListItem>
+                            <MudListItem> Last Updated: @_pageProduct.LastCount </MudListItem>
                         </MudList>
                     </MudPaper>
                 </MudItem>
@@ -44,20 +45,53 @@
                 <MudGrid>
                     <MudItem xs="12" sm="12" Class="py-4 px-5">
                         <MudPaper Elevation="0" Class="d-flex align-center justify-start mud-width-full px-5">
-                            <MudText Typo="Typo.h4" Class="text-start">Suppliers</MudText>
+                            <MudText Typo="Typo.h4" Class="text-start py-4">Suppliers</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" Class="py-4 px-5">
+                        <MudPaper Elevation="0" Class="px-5">
+                            <MudPaper Elevation="1" Class="w-100">
+                                <MudGrid>
+                                    <MudItem sm="8" xs="12">
+                                        <MudSelect T="Supplier" @bind-Value="_selectedValue" @bind-SelectedValues="SelectedSuppliers" Label="Select Suppliers" MultiSelection="true" FullWidth="true">
+                                            @foreach (var option in AllSuppliers)
+                                            {
+                                                <MudSelectItem T="Supplier" Value="@option" >@option.Name</MudSelectItem>
+                                            }
+                                        </MudSelect>
+                                    </MudItem>
+                                    <MudItem sm="4" xs="12">
+                                        <MudFab @onclick="AddSuppliers" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Add" Size="Size.Large" Title="Add Supplier" />
+                                    </MudItem>
+                                </MudGrid>
+                            </MudPaper>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="12" sm="6" Class="py-4 px-5">
                         <MudPaper Elevation="0" Class="d-flex align-center justify-center mud-width-full py-0">
-                            <MudDataGrid Items="@PageProduct.Suppliers">
-                                <Columns>
-                                    <PropertyColumn Property="x => x.Name" Title="Nr" />
-                                    <PropertyColumn Property="x => x.Email" />
-                                    <PropertyColumn Property="x => x.PhoneNumber" />
-                                    <PropertyColumn Property="x => x.Active" />
-                                    <PropertyColumn Property="x => x.InceptionDate" Title="Molar mass" />
-                                </Columns>
-                            </MudDataGrid>
+                            <MudTable Items="@_pageProduct.Suppliers" Hover="true" Loading="true" LoadingProgressColor="Color.Info" Breakpoint="Breakpoint.Sm">
+                                <HeaderContent>
+                                    <MudTh>Name</MudTh>
+                                    <MudTh>Phone</MudTh>
+                                    <MudTh>Email</MudTh>
+                                    <MudTh>Status</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="Name">@context.Name</MudTd>
+                                    <MudTd DataLabel="Phone Number">@context.PhoneNumber</MudTd>
+                                    <MudTd DataLabel="Email">@context.Email</MudTd>
+                                    <MudTd DataLabel="Status">
+                                        @if (@context.Active == true)
+                                        {
+                                            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="@Color.Success" Title="Active"></MudIcon>
+                                        }
+                                        else if (@context.Active == false)
+                                        {
+                                            <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="@Color.Error" Title="InActive"></MudIcon>
+                                        }
+                                    </MudTd>
+                                </RowTemplate>
+                            </MudTable>
                         </MudPaper>
                     </MudItem>
                 </MudGrid>
@@ -82,23 +116,47 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    public Product? PageProduct;
+    private Product? _pageProduct;
 
+    private Supplier[]? AllSuppliers { get; set; }
+    private Supplier? _selectedValue;
+    private IEnumerable<Supplier> SelectedSuppliers { get; set; } = new List<Supplier>(){};
+    
     protected override async Task OnInitializedAsync()
     {
         await GetProduct();
+        await GetAllSuppliers();
     }
-
 
     // get product function
     private async Task GetProduct()
     {
-        PageProduct = await ProductService.GetProduct(Id)!;
+        _pageProduct = await ProductService.GetProduct(Id)!;
+    }
+
+    private async Task GetAllSuppliers()
+    {
+        AllSuppliers = await SupplierService.GetSuppliers()!;
     }
 
     private void GoBack()
     {
         NavigationManager.NavigateTo("/products");
+    }
+
+    private async Task AddSuppliers()
+    {
+        if (SelectedSuppliers.Count() == 0)
+        {
+            Console.WriteLine("Please select suppliers to add");
+            return;
+        }
+
+        List<Supplier> suppliersToAdd = new List<Supplier>(SelectedSuppliers);
+
+        var addSupplier = await ProductService.AddSupplier(Id, suppliersToAdd);
+        Console.WriteLine("suppliers added");
+        await OnInitializedAsync();
     }
 
 }
