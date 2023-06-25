@@ -9,12 +9,12 @@
     
     <MudContainer>
         <MudPaper Class="mb-5" Elevation="1">
-            <h1 class="text-center">@PageProduct.Name</h1>
+            <MudText Typo="Typo.h3" Class="text-center">@PageProduct.Name</MudText>
         </MudPaper>
         <MudPaper Class="mb-5" Elevation="0">
-            <MudGrid Class="p-0">
+            <MudGrid Spacing="0">
                 <MudItem xs="12" sm="6">
-                    <MudPaper Class="d-flex align-center justify-center mud-width-full py-8" Elevation="0">
+                    <MudPaper Class="d-flex align-center justify-center mud-width-full py-0" Elevation="0">
                         <MudList Clickable="true" Dense="false" DisableGutters="false">
                             <MudListItem> SKU: @PageProduct.Sku </MudListItem>
                             <MudListItem> Barcode: @PageProduct.BarCode </MudListItem>
@@ -27,7 +27,7 @@
                     </MudPaper>
                 </MudItem>
                 <MudItem xs="12" sm="6">
-                    <MudPaper Class="d-flex align-center justify-center mud-width-full py-8" Elevation="0">
+                    <MudPaper Class="d-flex align-center justify-start mud-width-full py-0" Elevation="0">
                         <MudList Clickable="true" Dense="false" DisableGutters="false">
                             <MudListItem> Cost: @PageProduct.Cost </MudListItem>
                             <MudListItem> Sales Price: @PageProduct.SalesPrice </MudListItem>
@@ -39,13 +39,37 @@
                     </MudPaper>
                 </MudItem>
             </MudGrid>
+            
+            <MudPaper Elevation="0">
+                <MudGrid>
+                    <MudItem xs="12" sm="12" Class="py-4 px-5">
+                        <MudPaper Elevation="0" Class="d-flex align-center justify-start mud-width-full px-5">
+                            <MudText Typo="Typo.h4" Class="text-start">Suppliers</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" Class="py-4 px-5">
+                        <MudPaper Elevation="0" Class="d-flex align-center justify-center mud-width-full py-0">
+                            <MudDataGrid Items="@PageProduct.Suppliers">
+                                <Columns>
+                                    <PropertyColumn Property="x => x.Name" Title="Nr" />
+                                    <PropertyColumn Property="x => x.Email" />
+                                    <PropertyColumn Property="x => x.PhoneNumber" />
+                                    <PropertyColumn Property="x => x.Active" />
+                                    <PropertyColumn Property="x => x.InceptionDate" Title="Molar mass" />
+                                </Columns>
+                            </MudDataGrid>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+
+            </MudPaper>
+            
         </MudPaper>
     </MudContainer>
 }
 else
 {
     <PageTitle>Product Not Found</PageTitle>
-    
     <MudAlert Severity="Severity.Warning">This product does not exist</MudAlert>
 
     <MudButton Class="mt-5" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.SkipPrevious" 
