@@ -12,20 +12,30 @@
             <h1 class="text-center">@PageProduct.Name</h1>
         </MudPaper>
         <MudPaper Class="mb-5" Elevation="0">
-            <MudGrid>
+            <MudGrid Class="p-0">
                 <MudItem xs="12" sm="6">
                     <MudPaper Class="d-flex align-center justify-center mud-width-full py-8" Elevation="0">
                         <MudList Clickable="true" Dense="false" DisableGutters="false">
                             <MudListItem> SKU: @PageProduct.Sku </MudListItem>
                             <MudListItem> Barcode: @PageProduct.BarCode </MudListItem>
                             <MudListItem> Name: @PageProduct.Name </MudListItem>
-                            <MudListItem> SKU: @PageProduct.Category.Name </MudListItem>
+                            <MudListItem> Category: @PageProduct.Category.Name </MudListItem>
+                            <MudListItem> Quantity: @PageProduct.Quantity </MudListItem>
+                            <MudListItem> End Of Shelf Life: @PageProduct.EndOfShelfLife </MudListItem>
+                            <MudListItem> Location: In @PageProduct.Location </MudListItem>
                         </MudList>
                     </MudPaper>
                 </MudItem>
                 <MudItem xs="12" sm="6">
                     <MudPaper Class="d-flex align-center justify-center mud-width-full py-8" Elevation="0">
-                        xs=12 sm=6
+                        <MudList Clickable="true" Dense="false" DisableGutters="false">
+                            <MudListItem> Cost: @PageProduct.Cost </MudListItem>
+                            <MudListItem> Sales Price: @PageProduct.SalesPrice </MudListItem>
+                            <MudListItem> Minimum Stock: @PageProduct.MinimumStock </MudListItem>
+                            <MudListItem> Safety Stock: @PageProduct.SafetyStock </MudListItem>
+                            <MudListItem> Received: @PageProduct.Recieved </MudListItem>
+                            <MudListItem> Last Updated: @PageProduct.LastCount </MudListItem>
+                        </MudList>
                     </MudPaper>
                 </MudItem>
             </MudGrid>

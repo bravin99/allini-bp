@@ -59,7 +59,10 @@ namespace allinibp.Services
 
         public async Task<Product>? GetProduct(int Id)
         {
-            var product = await _dbContext.Products!.Include(p => p.Suppliers).FirstOrDefaultAsync(p => p.Id == Id);
+            var product = await _dbContext.Products!.Include(
+                    p => p.Suppliers).Include(
+                    c => c.Category).FirstOrDefaultAsync(
+                p => p.Id == Id);
             return product!;
         }
 
