@@ -37,6 +37,7 @@
             <MudTd DataLabel="Updated">@context.AdjustedCount</MudTd>
             <MudTd DataLabel="Updated">@context.Location</MudTd>
             <MudTd DataLabel="Actions">
+                <MudIconButton Icon="@Icons.Material.Filled.PanoramaFishEye" Color="Color.Tertiary" aria-label="view" Title="View" @onclick="@(() => NavigationManager.NavigateTo($"/products/{context.Id}/details"))"></MudIconButton>
                 <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Tertiary" aria-label="edit" Title="Edit" @onclick="@(() => NavigationManager.NavigateTo($"/products/{context.Id}/update"))"></MudIconButton>
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" Title="Delete"></MudIconButton>
             </MudTd>

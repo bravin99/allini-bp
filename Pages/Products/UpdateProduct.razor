@@ -25,9 +25,9 @@ else
 @code
 {
     [Parameter] public int Id { get; set; }
-    public ProductDto ProductDto = new ProductDto();
-    public Product? ProductToEdit;
-    public Category[]? categories;
+    private ProductDto ProductDto = new ProductDto();
+    private Product? ProductToEdit;
+    private Category[]? categories;
     public string? Response;
 
     protected override async Task OnInitializedAsync()
@@ -50,12 +50,12 @@ else
         }
     }
 
-    public async Task GetCategories()
+    private async Task GetCategories()
     {
         categories = await CategoryService.GetCategories()!;
     }
 
-    public async Task GetProduct()
+    private async Task GetProduct()
     {
         ProductToEdit = await ProductService.GetProduct(Id)!;
     }
@@ -66,7 +66,7 @@ else
         GoBack();
     }
 
-    public void GoBack()
+    private void GoBack()
     {
         NavigationManager.NavigateTo("/products");
     }
