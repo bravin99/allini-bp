@@ -65,25 +65,24 @@ namespace allinibp.Services
 
         public async Task<Supplier[]>? GetSuppliers()
         {
-            var SupplierList = await _dbContext.Suppliers!.ToArrayAsync();
-            return SupplierList != null ? SupplierList : null!;
+            var supplierList = await _dbContext.Suppliers!.ToArrayAsync();
+            return supplierList;
         }
 
-        public async Task<string> UpdateSupplier(int Id, SupplierDto request)
+        public async Task<string> UpdateSupplier(int id, SupplierDto request)
         {
-            var supplier = await GetSupplierById(Id)!;
-            if (supplier != null)
-            {
-                supplier.Name = request.Name;
-                supplier.Email = request.Email;
-                supplier.PhoneNumber = request.PhoneNumber;
-                supplier.Active = request.Active;
-                supplier.InceptionDate = request.InceptionDate;
+            var supplier = await GetSupplierById(id)!;
 
-                await _dbContext.SaveChangesAsync();
-                return "Update to supplier was successful";
-            }
-            return "An error occured while performing the supplier update";
+            if (supplier == null) return "Supplier does not exist";
+            
+            supplier.Name = request.Name;
+            supplier.Email = request.Email;
+            supplier.PhoneNumber = request.PhoneNumber;
+            supplier.Active = request.Active;
+            supplier.InceptionDate = request.InceptionDate;
+
+            await _dbContext.SaveChangesAsync();
+            return "Update to supplier was successful";
         }
     }
 }

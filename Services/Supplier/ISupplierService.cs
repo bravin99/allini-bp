@@ -6,9 +6,9 @@ namespace allinibp.Services
     public interface ISupplierService
     {
         public Task<string> CreateSupplier(SupplierDto request);
-        public Task<string> UpdateSupplier(int Id, SupplierDto request);
-        public Task<Supplier>? GetSupplierById(int Id);
+        public Task<string> UpdateSupplier(int id, SupplierDto request);
+        public Task<Supplier>? GetSupplierById(int id);
         public Task<Supplier[]>? GetSuppliers();
-        public Task<string> DeleteSupplier(int Id);
+        public Task<string> DeleteSupplier(int id);
     }
 }
