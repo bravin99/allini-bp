@@ -17,11 +17,11 @@ namespace allinibp.Services
 
         public async Task<string> CreateSupplier(SupplierDto request)
         {
-            var SupplierExists = await _dbContext.Suppliers!.FirstOrDefaultAsync(s => s.Email == request.Email);
+            var supplierExists = await _dbContext.Suppliers!.FirstOrDefaultAsync(s => s.Email == request.Email);
             
-            if (SupplierExists != null) return "Supplier already exists";
+            if (supplierExists != null) return "Supplier already exists";
            
-            Supplier newSupplier = new Supplier(){
+            var newSupplier = new Supplier(){
                 Name = request.Name,
                 Email = request.Email,
                 PhoneNumber = request.PhoneNumber,
@@ -36,15 +36,23 @@ namespace allinibp.Services
             
         }
 
-        public Task<string> DeleteSupplier(int Id)
+        public async Task<string> DeleteSupplier(int id)
         {
-            throw new NotImplementedException();
+            var supplier = await _dbContext.Suppliers!.Include(p => p.Products).FirstOrDefaultAsync(
+                s => s.Id == id);
+            
+            if (supplier == null) return "Supplier with id does not exist";
+
+            _dbContext.Suppliers!.Remove(supplier);
+            await _dbContext.SaveChangesAsync();
+            
+            return "Supplier details deleted";
         }
 
-        public async Task<Supplier>? GetSupplierById(int Id)
+        public async Task<Supplier>? GetSupplierById(int id)
         {
-            var supplier = await _dbContext.Suppliers!.FirstOrDefaultAsync(s => s.Id == Id);
-            return supplier != null ? supplier : null!;
+            var supplier = await _dbContext.Suppliers!.FirstOrDefaultAsync(s => s.Id == id);
+            return supplier!;
         }
 
         public async Task<Supplier[]>? GetSuppliers()
