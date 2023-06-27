@@ -7,12 +7,10 @@ namespace allinibp.Services
     public class SupplierService : ISupplierService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly IUtilsService _myUtils;
 
         public SupplierService(ApplicationDbContext dbContext, IUtilsService myUtils)
         {
             _dbContext = dbContext;
-            _myUtils = myUtils;
         }
 
         public async Task<string> CreateSupplier(SupplierDto request)
@@ -81,7 +79,7 @@ namespace allinibp.Services
             supplier.InceptionDate = request.InceptionDate;
 
             await _dbContext.SaveChangesAsync();
-            return "Update to supplier was successful";
+            return "Update was successful";
         }
     }
 }

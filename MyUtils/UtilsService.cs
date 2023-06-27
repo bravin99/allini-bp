@@ -7,12 +7,13 @@ namespace allinibp.Services
 {
     public class UtilsService : IUtilsService
     {
-        private static Random rand = new Random();
-        public Task<string> RandomString(int StringLength)
+        private static Random _random = new Random();
+        public Task<string> RandomString(int stringLength)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
 
-            var randString = new string(Enumerable.Repeat(chars, StringLength).Select(s => s[rand.Next(s.Length)]).ToArray());
+            var randString = new string(Enumerable.Repeat(chars, stringLength).Select(
+                s => s[_random.Next(s.Length)]).ToArray());
 
             return Task.FromResult<string>(randString);
         }
