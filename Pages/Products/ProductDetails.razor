@@ -7,7 +7,6 @@
 @if (_pageProduct != null)
 {
     <PageTitle>@_pageProduct.Name</PageTitle>
-    
     <MudContainer>
         <MudPaper Class="mb-5" Elevation="1">
             <MudText Typo="Typo.h3" Class="text-center py-3">@_pageProduct.Name</MudText>
@@ -53,7 +52,7 @@
                             <MudPaper Elevation="1" Class="w-100">
                                 <MudGrid>
                                     <MudItem sm="8" xs="12">
-                                        <MudSelect T="Supplier" @bind-Value="_selectedValue" @bind-SelectedValues="SelectedSuppliers" Label="Select Suppliers" MultiSelection="true" FullWidth="true">
+                                        <MudSelect T="Supplier" @bind-Value="_selectedValue" @bind-SelectedValues="SelectedSuppliers" Label="Select Suppliers" MultiSelection="true" FullWidth="true" Class="px-4">
                                             @foreach (var option in AllSuppliers)
                                             {
                                                 <MudSelectItem T="Supplier" Value="@option" >@option.Name</MudSelectItem>
@@ -67,9 +66,9 @@
                             </MudPaper>
                         </MudPaper>
                     </MudItem>
-                    <MudItem xs="12" sm="6" Class="py-4 px-5">
+                    <MudItem xs="12" sm="10" Class="py-4 px-5">
                         <MudPaper Elevation="0" Class="d-flex align-center justify-center mud-width-full py-0">
-                            <MudTable Items="@_pageProduct.Suppliers" Hover="true" Loading="true" LoadingProgressColor="Color.Info" Breakpoint="Breakpoint.Sm">
+                            <MudTable Items="@_pageProduct.Suppliers" Hover="true" Loading="true" LoadingProgressColor="Color.Info" Breakpoint="Breakpoint.Sm" Class="mud-width-full">
                                 <HeaderContent>
                                     <MudTh>Name</MudTh>
                                     <MudTh>Phone</MudTh>
