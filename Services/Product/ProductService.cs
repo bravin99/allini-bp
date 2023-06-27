@@ -108,6 +108,20 @@ namespace allinibp.Services
             
             return "supplier added to product";
         }
-        
+
+        public async Task<string> RemoveSupplier(int productId, int supplierId)
+        {
+            var product = await GetProduct(productId)!;
+            var supplier = await _dbContext.Suppliers!.FirstOrDefaultAsync(
+                s => s.Id == supplierId);
+
+            if (product == null!) return "Product with id does not exist";
+            if (supplier == null!) return "Supplier with id does not exist";
+
+            product.Suppliers!.Remove(supplier);
+            await _dbContext.SaveChangesAsync();
+
+            return "Supplier removed";
+        }
     }
 }
