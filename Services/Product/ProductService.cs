@@ -99,10 +99,10 @@ namespace allinibp.Services
 
             if (product == null!) return "product does not exist";
 
-            foreach (var s in suppliers)
+            foreach (var s in suppliers.Where(s => 
+                         !(product.Suppliers!.Any(x => x.Id == s.Id))))
             {
-                if (!(product.Suppliers!.Any(x => x.Id == s.Id))) 
-                    product.Suppliers!.Add(s);
+                product.Suppliers!.Add(s);
             }
             await _dbContext.SaveChangesAsync();
             
