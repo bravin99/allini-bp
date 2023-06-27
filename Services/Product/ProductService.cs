@@ -36,33 +36,32 @@ namespace allinibp.Services
                 Location = request.Location,
                 LastCount = _myUtils.ToDateOnly(DateTime.UtcNow).Result,
             };
-            // var category = await _dbContext.Categories!.FirstOrDefaultAsync(c => c.Id == request.CategoryId);
-            // if (category != null)
-            //     NewProduct.Category = category;
 
             await _dbContext.Products!.AddAsync(newProduct);
             await _dbContext.SaveChangesAsync();
             return "Product created";
         }
 
-        public async Task<string> DeleteProduct(int Id)
+        public async Task<string> DeleteProduct(int id)
         {
-            var p = await _dbContext.Products!.FirstOrDefaultAsync(p => p.Id == Id);
-            if (p != null)
-            {
-                _dbContext.Products!.Remove(p);
-                await _dbContext.SaveChangesAsync();
-                return "The product was deleted successfully!";
-            }
-            return "The product you are trying to delete was not found!";
+            var product = await GetProduct(id)!;
+            
+            if (product == null!) return "No product with matching id found!";
+            
+            // remove product from context
+            _dbContext.Products!.Remove(product);
+            
+            await _dbContext.SaveChangesAsync();
+            
+            return "product deleted successfully!";
         }
 
-        public async Task<Product>? GetProduct(int Id)
+        public async Task<Product>? GetProduct(int id)
         {
             var product = await _dbContext.Products!.Include(
                     p => p.Suppliers).Include(
                     c => c.Category).FirstOrDefaultAsync(
-                p => p.Id == Id);
+                p => p.Id == id);
             return product!;
         }
 
@@ -72,36 +71,33 @@ namespace allinibp.Services
             return products!;
         }
 
-        public async Task<string> UpdateProduct(int Id, ProductDto request)
+        public async Task<string> UpdateProduct(int id, ProductDto request)
         {
-            var product = await _dbContext.Products!.FirstOrDefaultAsync(p => p.Id == Id);
-            if (product != null)
-            {
-                product.BarCode = request.BarCode;
-                product.Name = request.Name;
-                product.Quantity = request.Quantity;
-                product.MinimumStock = request.MinimumStock;
-                product.SafetyStock = request.SafetyStock;
-                product.Cost = request.Cost;
-                product.SalesPrice = request.SalesPrice;
-                product.EndOfShelfLife = DateTime.SpecifyKind((DateTime)request.EndOfShelfLife!, DateTimeKind.Utc);
-                product.Image = request.Image;
-                product.Location = request.Location;
-                product.LastCount = _myUtils.ToDateOnly(DateTime.UtcNow).Result;
-                // product.Supplier = request.Supplier;
+            var product = await GetProduct(id)!;
 
-                await _dbContext.SaveChangesAsync();
-                return "Product was upated successfully";
-            }
-            return "Error trying to update product";
+            if (product == null!) return "Error trying to update product";
+            
+            product.BarCode = request.BarCode;
+            product.Name = request.Name;
+            product.Quantity = request.Quantity;
+            product.MinimumStock = request.MinimumStock;
+            product.SafetyStock = request.SafetyStock;
+            product.Cost = request.Cost;
+            product.SalesPrice = request.SalesPrice;
+            product.EndOfShelfLife = DateTime.SpecifyKind((DateTime)request.EndOfShelfLife!, DateTimeKind.Utc);
+            product.Image = request.Image;
+            product.Location = request.Location;
+            product.LastCount = _myUtils.ToDateOnly(DateTime.UtcNow).Result;
+
+            await _dbContext.SaveChangesAsync();
+            return "Product was updated successfully";
         }
         
         public async Task<string> AddSupplier(int id, List<Supplier> suppliers)
         {
-            var product = await _dbContext.Products!.Include(
-                s => s.Suppliers).FirstOrDefaultAsync(x => x.Id == id);
+            var product = await GetProduct(id)!;
 
-            if (product == null) return "product does not exist";
+            if (product == null!) return "product does not exist";
 
             foreach (var s in suppliers)
             {
