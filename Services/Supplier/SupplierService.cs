@@ -35,11 +35,16 @@ namespace allinibp.Services
             return "Supplier created!";
             
         }
+        
+        public async Task<Supplier>? GetSupplierById(int id)
+        {
+            var supplier = await _dbContext.Suppliers!.Include(p => p.Products).FirstOrDefaultAsync(s => s.Id == id);
+            return supplier!;
+        }
 
         public async Task<string> DeleteSupplier(int id)
         {
-            var supplier = await _dbContext.Suppliers!.Include(p => p.Products).FirstOrDefaultAsync(
-                s => s.Id == id);
+            var supplier = await GetSupplierById(id)!;
             
             if (supplier == null) return "Supplier with id does not exist";
 
@@ -55,12 +60,6 @@ namespace allinibp.Services
             await _dbContext.SaveChangesAsync();
             
             return "Supplier details deleted";
-        }
-
-        public async Task<Supplier>? GetSupplierById(int id)
-        {
-            var supplier = await _dbContext.Suppliers!.FirstOrDefaultAsync(s => s.Id == id);
-            return supplier!;
         }
 
         public async Task<Supplier[]>? GetSuppliers()
