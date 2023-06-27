@@ -43,7 +43,15 @@ namespace allinibp.Services
             
             if (supplier == null) return "Supplier with id does not exist";
 
+            // Remove the supplier from the database.
             _dbContext.Suppliers!.Remove(supplier);
+            
+            // Keep the products in the database.
+            foreach (var product in supplier.Products!)
+            {
+                _dbContext.Products!.Attach(product);
+            }
+            
             await _dbContext.SaveChangesAsync();
             
             return "Supplier details deleted";
