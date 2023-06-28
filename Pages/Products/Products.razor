@@ -9,13 +9,13 @@
 <MudContainer>
     <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Tertiary" @onclick="NavToCreate" Class="m-2">Create New Product</MudButton>
     
-    @if (ProductList != null)
+    @if (_productList != null)
     {
-        <MudTable Items="@ProductList" Dense="false" Hover="true" Bordered="false" Striped="false" Filter="new Func<Product, bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Class="mt-5 mb-3">
+        <MudTable Items="@_productList" Dense="false" Hover="true" Bordered="false" Striped="false" Filter="new Func<Product, bool>(FilterFunc1)" @bind-SelectedItem="_selectedItem" Class="mt-5 mb-3">
             <ToolBarContent>
                 <MudText Typo="Typo.h6">Product List</MudText>
                 <MudSpacer/>
-                <MudTextField @bind-Value="SearchParam" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                <MudTextField @bind-Value="_searchParam" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>SKU</MudTh>
@@ -58,12 +58,12 @@
 
 @code
 {
-    public Product[]? ProductList;
-    private string SearchParam = string.Empty;
-    private Product selectedItem1 = null!;
-    private bool FilterFunc1(Product element) => FilterFunc(element, SearchParam);
+    private Product[]? _productList;
+    private string _searchParam = string.Empty;
+    private Product _selectedItem = null!;
+    private bool FilterFunc1(Product element) => FilterFunc(element, _searchParam);
 
-    private bool FilterFunc(Product element, string searchString)
+    private static bool FilterFunc(Product element, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
@@ -75,20 +75,23 @@
     }
 
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         await GetProducts();
     }
     
     async Task GetProducts()
     {
-        ProductList = await ProductService.GetProducts()!;
+        _productList = await ProductService.GetProducts()!;
     }
 
     async Task DeleteProduct(int productId)
     {
+        if (_productList == null) return;
+        var product = _productList.FirstOrDefault(p => p.Id == productId);
+        
         if (await JsRuntime.InvokeAsync<bool>("confirm", 
-            $"You are about to delete product with id: {productId}"))
+            $"You are about to delete product: {product?.Name}"))
         {
             var response = await ProductService.DeleteProduct(productId);
             await OnInitializedAsync();
