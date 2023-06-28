@@ -1,6 +1,7 @@
 @page "/suppliers"
 @inject ISupplierService SupplierService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 @attribute [Authorize]
 
 <PageTitle>Suppliers</PageTitle>
@@ -80,8 +81,12 @@
 
     async Task DeleteSupplier(int supplierId)
     {
-        var response = await SupplierService.DeleteSupplier(supplierId);
-        await OnInitializedAsync();
+        if (await JsRuntime.InvokeAsync<bool>("confirm", 
+            $"You are about to delete supplier with id: {supplierId}"))
+        {
+            var response = await SupplierService.DeleteSupplier(supplierId);
+            await OnInitializedAsync();
+        }
     }
 
     void NavToCreate()

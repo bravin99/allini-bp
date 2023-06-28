@@ -1,6 +1,7 @@
 @page "/products"
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 @attribute [Authorize]
 
 <PageTitle>Products</PageTitle>
@@ -41,7 +42,7 @@
                 <MudTd DataLabel="Actions">
                     <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Tertiary" aria-label="view" Title="View" @onclick="@(() => NavigationManager.NavigateTo($"/products/{context.Id}/details"))"></MudIconButton>
                     <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Tertiary" aria-label="edit" Title="Edit" @onclick="@(() => NavigationManager.NavigateTo($"/products/{context.Id}/update"))"></MudIconButton>
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" Title="Delete"></MudIconButton>
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" Title="Delete" @onclick="@(() => DeleteProduct(context.Id))"></MudIconButton>
                 </MudTd>
             </RowTemplate>
             <PagerContent>
@@ -79,14 +80,23 @@
         await GetProducts();
     }
     
-    private async Task GetProducts()
+    async Task GetProducts()
     {
         ProductList = await ProductService.GetProducts()!;
     }
-    
+
+    async Task DeleteProduct(int productId)
+    {
+        if (await JsRuntime.InvokeAsync<bool>("confirm", 
+            $"You are about to delete product with id: {productId}"))
+        {
+            var response = await ProductService.DeleteProduct(productId);
+            await OnInitializedAsync();
+        }
+    }
+
     private void NavToCreate()
     {
         NavigationManager.NavigateTo("/products/create");
     }
 }
-
