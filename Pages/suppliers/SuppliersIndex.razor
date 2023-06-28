@@ -35,7 +35,7 @@
                 <MudTd DataLabel="Display">@context.InceptionDate</MudTd>
                 <MudTd DataLabel="Actions">
                     <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Tertiary" aria-label="edit" Title="Edit" @onclick="@(() => NavigationManager.NavigateTo($"/suppliers/{@context.Id}/edit"))"></MudIconButton>
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" Title="Delete"></MudIconButton>
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" Title="Delete" @onclick="@(() => DeleteSupplier(@context.Id))" ></MudIconButton>
                 </MudTd>
             </RowTemplate>
             <PagerContent>
@@ -76,6 +76,12 @@
     async Task GetSupplierList()
     {
         SupplierList = await SupplierService.GetSuppliers()!;
+    }
+
+    async Task DeleteSupplier(int supplierId)
+    {
+        var response = await SupplierService.DeleteSupplier(supplierId);
+        await OnInitializedAsync();
     }
 
     void NavToCreate()
