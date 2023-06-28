@@ -2,16 +2,17 @@
 @inject IProductService ProductService
 @inject ICategoryService CategoryService
 @inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
 @attribute [Authorize]
 
-@if (ProductToEdit != null)
+@if (_productToEdit != null)
 {
-    <PageTitle>Update Product Page: @ProductToEdit.Name</PageTitle>
+    <PageTitle>Update Product Page: @_productToEdit.Name</PageTitle>
     <MudContainer>
         <MudPaper Class="mb-5" Elevation="0">
-            <h1 class="text-center">Update Product: @ProductToEdit.Name</h1>
+            <h1 class="text-center">Update Product: @_productToEdit.Name</h1>
         </MudPaper>
-        <ProductForm ProductDto="ProductDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="categories" ButtonTxt="Update Product"/>
+        <ProductForm ProductDto="_productDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="_categories" ButtonTxt="Update Product"/>
     </MudContainer>
 }
 else
@@ -25,9 +26,9 @@ else
 @code
 {
     [Parameter] public int Id { get; set; }
-    private ProductDto ProductDto = new ProductDto();
-    private Product? ProductToEdit;
-    private Category[]? categories;
+    private ProductDto _productDto = new ProductDto();
+    private Product? _productToEdit;
+    private Category[]? _categories;
     public string? Response;
 
     protected override async Task OnInitializedAsync()
@@ -35,34 +36,35 @@ else
         await GetCategories();
         await GetProduct();
 
-        if (ProductToEdit != null)
+        if (_productToEdit != null)
         {
-            ProductDto.BarCode = ProductToEdit.BarCode;
-            ProductDto.Name = ProductToEdit.Name;
-            ProductDto.Category = ProductToEdit.Category;
-            ProductDto.Quantity = ProductToEdit.Quantity;
-            ProductDto.MinimumStock = ProductToEdit.MinimumStock;
-            ProductDto.SafetyStock = ProductToEdit.SafetyStock;
-            ProductDto.Cost = ProductToEdit.Cost;
-            ProductDto.SalesPrice = ProductToEdit.SalesPrice;
-            ProductDto.EndOfShelfLife = ProductToEdit.EndOfShelfLife; //(ProductToEdit.EndOfShelfLife!.Value).ToDateTime(TimeOnly.Parse("10:00 PM"))
-            ProductDto.Location = ProductToEdit.Location;
+            _productDto.BarCode = _productToEdit.BarCode;
+            _productDto.Name = _productToEdit.Name;
+            _productDto.Category = _productToEdit.Category;
+            _productDto.Quantity = _productToEdit.Quantity;
+            _productDto.MinimumStock = _productToEdit.MinimumStock;
+            _productDto.SafetyStock = _productToEdit.SafetyStock;
+            _productDto.Cost = _productToEdit.Cost;
+            _productDto.SalesPrice = _productToEdit.SalesPrice;
+            _productDto.EndOfShelfLife = _productToEdit.EndOfShelfLife; //(ProductToEdit.EndOfShelfLife!.Value).ToDateTime(TimeOnly.Parse("10:00 PM"))
+            _productDto.Location = _productToEdit.Location;
         }
     }
 
     private async Task GetCategories()
     {
-        categories = await CategoryService.GetCategories()!;
+        _categories = await CategoryService.GetCategories()!;
     }
 
     private async Task GetProduct()
     {
-        ProductToEdit = await ProductService.GetProduct(Id)!;
+        _productToEdit = await ProductService.GetProduct(Id)!;
     }
 
     private async Task OnValidSubmit()
     {
-        Response = await ProductService.UpdateProduct(Id, ProductDto);
+        var response = await ProductService.UpdateProduct(Id, _productDto);
+        Snackbar.Add(response, Severity.Success);
         GoBack();
     }
 

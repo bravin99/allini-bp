@@ -2,17 +2,18 @@
 @inject ICategoryService CategoryService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime Js
+@inject ISnackbar Snackbar
 @attribute [Authorize]
 
 <PageTitle>Categories</PageTitle>
 <MudContainer>
-    <CategoryForm ModelDto="NewCategory" OnValidSubmit="OnValidSubmit" CreateResponse=@CreateResponse validation_success="validation_success" ButtonTxt="Create Category"/>
+    <CategoryForm ModelDto="NewCategory" OnValidSubmit="OnValidSubmit" CreateResponse="CreateResponse" ValidationSuccess="_validationSuccess" ButtonTxt="Create Category"/>
 
-    <MudTable Items="@CategoryList" Dense="false" Hover="true" Bordered="false" Striped="false" Filter="new Func<Category,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Class="mt-5 mb-3">
+    <MudTable Items="@_categoryList" Dense="false" Hover="true" Bordered="false" Striped="false" Filter="new Func<Category,bool>(FilterFunc1)" @bind-SelectedItem="_selectedItem1" Class="mt-5 mb-3">
         <ToolBarContent>
             <MudText Typo="Typo.h6">Category List</MudText>
             <MudSpacer />
-            <MudTextField @bind-Value="SearchParam" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            <MudTextField @bind-Value="_searchParam" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh>Name</MudTh>
@@ -44,12 +45,12 @@
 @code
 {
     @* table *@
-    public Category[]? CategoryList;
-    private string SearchParam = string.Empty;
-    private Category selectedItem1 = null!;
-    private bool FilterFunc1(Category element) => FilterFunc(element, SearchParam);
+    private Category[]? _categoryList;
+    private string _searchParam = string.Empty;
+    private Category _selectedItem1 = null!;
+    private bool FilterFunc1(Category element) => FilterFunc(element, _searchParam);
 
-    private bool FilterFunc(Category element, string searchString)
+    private static bool FilterFunc(Category element, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
@@ -61,35 +62,38 @@
     }
     @* table end *@
 
-    public CategoryDto NewCategory { get; set; } = new CategoryDto();
-    public bool validation_success = false;
+    private CategoryDto NewCategory { get; set; } = new CategoryDto();
+    private bool _validationSuccess = false;
     public string? CreateResponse;
     protected override async Task OnInitializedAsync()
     {
         await GetCategoryList();
     }
 
-    public async Task GetCategoryList()
+    private async Task GetCategoryList()
     {
-        CategoryList = await CategoryService.GetCategories()!;
+        _categoryList = await CategoryService.GetCategories()!;
     }
 
     async void OnValidSubmit()
     {
-        var Response = await CategoryService.CreateCategory(NewCategory);
-        CreateResponse = Response;
-        validation_success = true;
+        var response = await CategoryService.CreateCategory(NewCategory);
+        _validationSuccess = true;
+        Snackbar.Add(response, Severity.Success);
         NewCategory = new CategoryDto();
         StateHasChanged();
         await OnInitializedAsync();
     }
 
-    async void DeleteCategory(int get_id)
+    async void DeleteCategory(int categoryId)
     {
-        var c = await CategoryService.GetCategory(get_id);
-        if (await Js.InvokeAsync<bool>("confirm", $"Are you sure you wan't to delete {c.Name}?"))
+        var c = await CategoryService.GetCategory(categoryId);
+        
+        if (await Js.InvokeAsync<bool>("confirm",
+            $"Are you sure you want to delete {c.Name}?"))
         {
             var result = await CategoryService.DeleteCategory(c.Id);
+            Snackbar.Add(result, Severity.Error);
             StateHasChanged();
             await OnInitializedAsync();
         }

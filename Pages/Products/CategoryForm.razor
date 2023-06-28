@@ -19,7 +19,7 @@
         <MudItem xs="12" sm="5">
             <MudPaper Class="pa-4 mud-height-full">
                 <MudText Typo="Typo.subtitle2">Validation Summary</MudText>
-                @if (validation_success)
+                @if (ValidationSuccess)
                 {
                     <MudText Color="Color.Success">@CreateResponse</MudText>
                 }
@@ -38,7 +38,7 @@
 {
     [Parameter] public CategoryDto ModelDto { get; set; } = new CategoryDto();
     [Parameter] public EventCallback OnValidSubmit { get; set; }
-    [Parameter] public bool validation_success { get; set; } = false;
+    [Parameter] public bool ValidationSuccess { get; set; } = false;
     [Parameter] public string? CreateResponse { get; set; }
     [Parameter] public string ButtonTxt { get; set; } = "Create";
 }

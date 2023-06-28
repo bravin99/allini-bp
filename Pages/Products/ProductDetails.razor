@@ -67,7 +67,7 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="12" sm="10" Class="py-4 px-5">
-                        <MudPaper Elevation="0" Class="d-flex align-center justify-center mud-width-full py-0">
+                        <MudPaper Elevation="0" Class="d-flex align-center justify-center mud-width-full px-4">
                             <MudTable Items="@_pageProduct.Suppliers" Hover="true" Loading="true" LoadingProgressColor="Color.Info" Breakpoint="Breakpoint.Sm" Class="mud-width-full">
                                 <HeaderContent>
                                     <MudTh>Name</MudTh>
@@ -80,11 +80,11 @@
                                     <MudTd DataLabel="Phone Number">@context.PhoneNumber</MudTd>
                                     <MudTd DataLabel="Email">@context.Email</MudTd>
                                     <MudTd DataLabel="Status">
-                                        @if (@context.Active == true)
+                                        @if (@context.Active)
                                         {
                                             <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="@Color.Success" Title="Active"></MudIcon>
                                         }
-                                        else if (@context.Active == false)
+                                        else
                                         {
                                             <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="@Color.Error" Title="InActive"></MudIcon>
                                         }
@@ -119,7 +119,7 @@ else
 
     private Supplier[]? AllSuppliers { get; set; }
     private Supplier? _selectedValue;
-    private IEnumerable<Supplier> SelectedSuppliers { get; set; } = new List<Supplier>(){};
+    private IEnumerable<Supplier> SelectedSuppliers { get; set; } = new List<Supplier>();
     
     protected override async Task OnInitializedAsync()
     {
@@ -145,13 +145,13 @@ else
 
     private async Task AddSuppliers()
     {
-        if (SelectedSuppliers.Count() == 0)
+        if (!SelectedSuppliers.Any())
         {
             Console.WriteLine("Please select suppliers to add");
             return;
         }
 
-        List<Supplier> suppliersToAdd = new List<Supplier>(SelectedSuppliers);
+        var suppliersToAdd = new List<Supplier>(SelectedSuppliers);
 
         var addSupplier = await ProductService.AddSupplier(Id, suppliersToAdd);
         Console.WriteLine("suppliers added");

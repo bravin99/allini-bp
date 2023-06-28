@@ -2,21 +2,20 @@
 @inject IProductService ProductService
 @inject ICategoryService CategoryService
 @inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
 @attribute [Authorize]
 
 <PageTitle>Create A New Product</PageTitle>
 
 <MudContainer>
-    <ProductForm ProductDto="ProductDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="categories" ButtonTxt="Create Product" />
+    <ProductForm ProductDto="_productDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="_categories" ButtonTxt="Create Product" />
 </MudContainer>
 
 @code
 {
-    public ProductDto ProductDto = new ProductDto();
-    public Category[]? categories;
-    public Category category = new Category();
-    public bool success = false;
-    public string? Response { get; set; }
+    private ProductDto _productDto = new ProductDto();
+    private Category[]? _categories;
+    public string Response = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -25,17 +24,18 @@
 
     private async Task GetCategories()
     {
-        categories = await CategoryService.GetCategories()!;
+        _categories = await CategoryService.GetCategories()!;
     }
 
-    private async Task OnValidSubmit()
+    async Task OnValidSubmit()
     {
-        Response = await ProductService.CreateProduct(ProductDto);
-        ProductDto = new ProductDto();
-        BackToProucts();
+        var response = await ProductService.CreateProduct(_productDto);
+        Snackbar.Add(response, Severity.Info);
+        _productDto = new ProductDto();
+        BackToProducts();
     }
 
-    void BackToProucts()
+    void BackToProducts()
     {
         NavigationManager.NavigateTo("/products");
     }

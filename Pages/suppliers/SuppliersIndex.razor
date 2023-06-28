@@ -2,6 +2,7 @@
 @inject ISupplierService SupplierService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime
+@inject ISnackbar Snackbar
 @attribute [Authorize]
 
 <PageTitle>Suppliers</PageTitle>
@@ -9,13 +10,13 @@
 <MudContainer>
     <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Tertiary" @onclick="NavToCreate" Class="m-2">Create Supplier</MudButton>
 
-    @if (SupplierList != null)
+    @if (_supplierList != null)
     {
-        <MudTable Items="@SupplierList" Dense="false" Hover="true" Bordered="false" Striped="false" Filter="new Func<Supplier,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Class="mt-5 mb-3">
+        <MudTable Items="@_supplierList" Dense="false" Hover="true" Bordered="false" Striped="false" Filter="new Func<Supplier,bool>(FilterFunc1)" @bind-SelectedItem="_selectedItem1" Class="mt-5 mb-3">
             <ToolBarContent>
                 <MudText Typo="Typo.h6">My Supplier List</MudText>
                 <MudSpacer />
-                <MudTextField @bind-Value="SearchParam" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                <MudTextField @bind-Value="_searchParam" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>Name</MudTh>
@@ -52,11 +53,11 @@
 
 @code
 {
-    public Supplier[]? SupplierList;
-    private string SearchParam = string.Empty;
-    private Supplier selectedItem1 = null!;
-    private bool FilterFunc1(Supplier element) => FilterFunc(element, SearchParam);
-    private bool FilterFunc(Supplier element, string searchString)
+    private Supplier[]? _supplierList;
+    private string _searchParam = string.Empty;
+    private Supplier _selectedItem1 = null!;
+    private bool FilterFunc1(Supplier element) => FilterFunc(element, _searchParam);
+    private static bool FilterFunc(Supplier element, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
@@ -76,19 +77,20 @@
 
     async Task GetSupplierList()
     {
-        SupplierList = await SupplierService.GetSuppliers()!;
+        _supplierList = await SupplierService.GetSuppliers()!;
     }
 
     async Task DeleteSupplier(int supplierId)
     {
-        if (SupplierList == null) return;
+        if (_supplierList == null) return;
         
-        var supplier = SupplierList.FirstOrDefault(s => s.Id == supplierId);
+        var supplier = _supplierList.FirstOrDefault(s => s.Id == supplierId);
         
         if (await JsRuntime.InvokeAsync<bool>("confirm", 
             $"You are about to delete supplier: {supplier?.Name}"))
         {
             var response = await SupplierService.DeleteSupplier(supplierId);
+            Snackbar.Add(response, Severity.Info);
             await OnInitializedAsync();
         }
     }
