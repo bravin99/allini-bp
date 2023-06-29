@@ -3,6 +3,7 @@
 @inject IProductService ProductService
 @inject ISupplierService SupplierService
 @inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
 
 @if (_pageProduct != null)
 {
@@ -74,6 +75,7 @@
                                     <MudTh>Phone</MudTh>
                                     <MudTh>Email</MudTh>
                                     <MudTh>Status</MudTh>
+                                    <MudTh>Actions</MudTh>
                                 </HeaderContent>
                                 <RowTemplate>
                                     <MudTd DataLabel="Name">@context.Name</MudTd>
@@ -88,6 +90,9 @@
                                         {
                                             <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="@Color.Error" Title="InActive"></MudIcon>
                                         }
+                                    </MudTd>
+                                    <MudTd DataLabel="Actions">
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" Title="Delete" @onclick="@(() => RemoveSupplier(context.Id))"></MudIconButton>
                                     </MudTd>
                                 </RowTemplate>
                             </MudTable>
@@ -128,22 +133,22 @@ else
     }
 
     // get product function
-    private async Task GetProduct()
+    async Task GetProduct()
     {
         _pageProduct = await ProductService.GetProduct(Id)!;
     }
 
-    private async Task GetAllSuppliers()
+    async Task GetAllSuppliers()
     {
         AllSuppliers = await SupplierService.GetSuppliers()!;
     }
 
-    private void GoBack()
+    void GoBack()
     {
         NavigationManager.NavigateTo("/products");
     }
 
-    private async Task AddSuppliers()
+    async Task AddSuppliers()
     {
         if (!SelectedSuppliers.Any())
         {
@@ -153,8 +158,15 @@ else
 
         var suppliersToAdd = new List<Supplier>(SelectedSuppliers);
 
-        var addSupplier = await ProductService.AddSupplier(Id, suppliersToAdd);
-        Console.WriteLine("suppliers added");
+        var response = await ProductService.AddSupplier(Id, suppliersToAdd);
+        Snackbar.Add(response, Severity.Info);
+        await OnInitializedAsync();
+    }
+
+    async Task RemoveSupplier(int supplierId)
+    {
+        var response = await ProductService.RemoveSupplier(_pageProduct!.Id, supplierId);
+        Snackbar.Add(response, Severity.Info);
         await OnInitializedAsync();
     }
 
