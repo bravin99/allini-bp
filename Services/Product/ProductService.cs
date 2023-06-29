@@ -99,14 +99,13 @@ namespace allinibp.Services
 
             if (product == null!) return "product does not exist";
 
-            foreach (var s in suppliers.Where(s => 
-                         !(product.Suppliers!.Any(x => x.Id == s.Id))))
+            foreach (var s in suppliers.Where(s => !(product.Suppliers!.Any(x => x.Id == s.Id))))
             {
                 product.Suppliers!.Add(s);
             }
             await _dbContext.SaveChangesAsync();
             
-            return "supplier added to product";
+            return "product updated";
         }
 
         public async Task<string> RemoveSupplier(int productId, int supplierId)
