@@ -2,11 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace allinibp.Services
 {
     public class UtilsService : IUtilsService
     {
+        private readonly IWebHostEnvironment _hostEnvironment;
+
+        public UtilsService(IWebHostEnvironment hostEnvironment)
+        {
+            _hostEnvironment = hostEnvironment;
+        }
+        
         private static Random _random = new Random();
         public Task<string> RandomString(int stringLength)
         {
@@ -22,6 +30,26 @@ namespace allinibp.Services
         {
             var nDate = new DateOnly(date.Year, date.Month, date.Day);
             return Task.FromResult<DateOnly>(nDate);
+        }
+        
+        private long maxFileSize = 1024 * 15;
+
+        public async Task<string> UploadImage(IBrowserFile file)
+        {
+            try
+            {
+                var trustedFilename = Path.GetRandomFileName();
+                var path = Path.Combine(_hostEnvironment.ContentRootPath, _hostEnvironment.EnvironmentName, "unsafe_uploads",
+                    trustedFilename);
+                await using FileStream fs = new(path, FileMode.Create);
+                await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
+                return path;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

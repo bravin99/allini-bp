@@ -37,7 +37,6 @@ namespace allinibp.Data.Models
         [Required]
         public DateTime? EndOfShelfLife { get; set; }
         public string? Image { get; set; } = string.Empty;
-        public byte[]? ImageData { get; set; }
         public Location Location { get; set; }
     }
 }

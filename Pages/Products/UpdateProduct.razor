@@ -3,6 +3,7 @@
 @inject ICategoryService CategoryService
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
+@inject IUtilsService UtilsService
 @attribute [Authorize]
 
 @if (_productToEdit != null)
@@ -12,7 +13,7 @@
         <MudPaper Class="mb-5" Elevation="0">
             <h1 class="text-center">Update Product: @_productToEdit.Name</h1>
         </MudPaper>
-        <ProductForm ProductDto="_productDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="_categories" ButtonTxt="Update Product"/>
+        <ProductForm ProductDto="_productDto" ProductImages="_productImages" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="_categories" ButtonTxt="Update Product"/>
     </MudContainer>
 }
 else
@@ -30,6 +31,7 @@ else
     private Product? _productToEdit;
     private Category[]? _categories;
     public string? Response;
+    private IList<IBrowserFile>? _productImages = new List<IBrowserFile>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -63,6 +65,13 @@ else
 
     private async Task OnValidSubmit()
     {
+        if (_productImages != null)
+        {
+            var location = await UtilsService.UploadImage(_productImages[0]);
+            if (!string.IsNullOrEmpty(location))
+                _productDto.Image = location;
+        }
+        
         var response = await ProductService.UpdateProduct(Id, _productDto);
         Snackbar.Add(response, Severity.Success);
         GoBack();
