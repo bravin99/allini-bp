@@ -9,7 +9,6 @@
 
 <MudContainer>
     <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Tertiary" @onclick="NavToCreate" Class="m-2">Create New Product</MudButton>
-    <MudButton Color="Color.Info" @onclick="@(() => Snackbar.Add("The reactor was fired up successfully", Severity.Info))">Info Snackbar</MudButton>
     @if (_productList != null)
     {
         <MudTable Items="@_productList" Dense="false" Hover="true" Bordered="false" Striped="false" Filter="new Func<Product, bool>(FilterFunc1)" @bind-SelectedItem="_selectedItem" Class="mt-5 mb-3">
