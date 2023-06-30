@@ -1,3 +1,4 @@
+@inject ISnackbar Snackbar
 
 <EditForm Model="@ProductDto" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
@@ -32,6 +33,12 @@
                         }
                     </MudSelect>
                     @* <MudSwitch Label="Display?" @bind-Checked="@ProductDto.Display" Color="Color.Secondary" Class="mt-3" /> *@
+                    <MudFileUpload T="IBrowserFile" FilesChanged="LoadFiles">
+                        <ButtonTemplate Context="fileButton">
+                            <MudFab HtmlTag="label" Color="Color.Secondary" Icon="@Icons.Material.Filled.Image" Label="Load picture"
+                                    for="@fileButton" />
+                        </ButtonTemplate>
+                    </MudFileUpload>
                 </MudCardContent>
                 <MudCardActions>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mx-auto">@ButtonTxt</MudButton>
@@ -65,6 +72,14 @@
     // [Parameter] public DateTime? EndOfLifeDate { get; set; }
     [Parameter] public Category[]? categories { get; set; }
     [Parameter] public string? CreateResponse { get; set; }
+    [Parameter] public IList<IBrowserFile>? ProductImages { get; set; }
     private string? stringValue { get; set; }
-
+    
+    public void LoadFiles(IBrowserFile file)
+    {
+        if (file == null) return;
+        
+        ProductImages!.Add(file);
+        Snackbar.Add($"{file.Name}", Severity.Success);
+    }
 }
