@@ -1,4 +1,5 @@
 @inject ISnackbar Snackbar
+@inject IWebHostEnvironment Environment
 
 <EditForm Model="@ProductDto" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
@@ -33,12 +34,9 @@
                         }
                     </MudSelect>
                     @* <MudSwitch Label="Display?" @bind-Checked="@ProductDto.Display" Color="Color.Secondary" Class="mt-3" /> *@
-                    <MudFileUpload T="IBrowserFile" FilesChanged="LoadFiles">
-                        <ButtonTemplate Context="fileButton">
-                            <MudFab HtmlTag="label" Color="Color.Secondary" Icon="@Icons.Material.Filled.Image" Label="Load picture"
-                                    for="@fileButton" />
-                        </ButtonTemplate>
-                    </MudFileUpload>
+                    <MudItem Class="mt-3">
+                        <InputFile OnChange="LoadFiles"/>
+                    </MudItem>
                 </MudCardContent>
                 <MudCardActions>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mx-auto">@ButtonTxt</MudButton>
@@ -72,14 +70,38 @@
     // [Parameter] public DateTime? EndOfLifeDate { get; set; }
     [Parameter] public Category[]? categories { get; set; }
     [Parameter] public string? CreateResponse { get; set; }
-    [Parameter] public IList<IBrowserFile>? ProductImages { get; set; }
-    private string? stringValue { get; set; }
+
+    [Parameter]
+    public IList<IBrowserFile>? ProductImages { get; set; } = new List<IBrowserFile>();
+
+    private long maxFileSize = 1024 * 10 * 10;
+    private int maxAllowedFiles = 1;
+    private bool isLoading;
     
-    public void LoadFiles(IBrowserFile file)
+    private string? stringValue { get; set; }
+
+    public async void LoadFiles(InputFileChangeEventArgs e)
     {
-        if (file == null) return;
-        
-        ProductImages!.Add(file);
-        Snackbar.Add($"{file.Name}", Severity.Success);
+        isLoading = true;
+        ProductImages.Clear();
+
+        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+        {
+            try
+            {
+                ProductImages.Add(file);
+                var trustedFileNameForFileStorage = Path.GetRandomFileName();
+                var path = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName, "unsafe_uploads", 
+                    trustedFileNameForFileStorage);
+                await using FileStream fs = new(path, FileMode.Create);
+                await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
+                Snackbar.Add($"{file.Name} added", Severity.Success);
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add($"file upload error", Severity.Error);
+            }
+            
+        }
     }
 }

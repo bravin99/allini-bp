@@ -32,23 +32,23 @@ namespace allinibp.Services
             return Task.FromResult<DateOnly>(nDate);
         }
         
-        private long maxFileSize = 1024 * 15;
+        private long maxFileSize = 10 * 1024 * 1024;
 
         public async Task<string> UploadImage(IBrowserFile file)
         {
             try
             {
-                var trustedFilename = Path.GetRandomFileName();
+                var trustedFilename = file.Name;
                 var path = Path.Combine(_hostEnvironment.ContentRootPath, _hostEnvironment.EnvironmentName, "unsafe_uploads",
                     trustedFilename);
-                await using FileStream fs = new(path, FileMode.Create);
-                await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
+                FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
+                filestream.Close();
                 return path;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
+                return string.Empty;
             }
         }
     }

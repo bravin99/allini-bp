@@ -16,7 +16,7 @@
     private ProductDto _productDto = new ProductDto();
     private Category[]? _categories;
     public string Response = string.Empty;
-    private IList<IBrowserFile>? _productImages = new List<IBrowserFile>();
+    private IList<IBrowserFile>? _productImages;
 
     protected override async Task OnInitializedAsync()
     {
