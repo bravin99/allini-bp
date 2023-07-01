@@ -72,7 +72,7 @@
     [Parameter] public string? CreateResponse { get; set; }
 
     [Parameter]
-    public List<IBrowserFile>? ProductImages { get; set; } = new();
+    public List<IBrowserFile>? ProductImages { get; set; }
 
     private long maxFileSize = 1024 * 10 * 10;
     private int maxAllowedFiles = 3;
@@ -83,28 +83,29 @@
     private async void LoadFiles(InputFileChangeEventArgs e)
     {
         isLoading = true;
-        ProductImages.Clear();
-
-        if (e != null)
+        ProductImages ??= new List<IBrowserFile>();
+        var files = e.GetMultipleFiles(maxAllowedFiles);
+        
+        if (files == null) return;
+        
+        foreach (var file in files)
         {
-            foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+            try
             {
-                try
-                {
-                    ProductImages.Add(file);
-                    var trustedFileNameForFileStorage = Path.GetRandomFileName();
-                    var path = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName, "unsafe_uploads", 
-                        trustedFileNameForFileStorage);
-                    await using FileStream fs = new(path, FileMode.Create);
-                    await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
-                    Snackbar.Add($"{file.Name} added", Severity.Success);
-                }
-                catch (Exception ex)
-                {
-                    Snackbar.Add($"file upload error", Severity.Error);
-                }
+                ProductImages.Add(file);
+                var trustedFileNameForFileStorage = file.Name;
+                var path = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName, "unsafe_uploads", 
+                    trustedFileNameForFileStorage);
+                await using FileStream fs = new(path, FileMode.Create);
+                await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
+                Snackbar.Add($"{file.Name} added", Severity.Success);
             }
-            
+            catch (Exception ex)
+            {
+                Snackbar.Add($"file upload error", Severity.Error);
+                Console.WriteLine(ex);
+            }
         }
+        
     }
 }
