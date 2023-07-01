@@ -72,10 +72,10 @@
     [Parameter] public string? CreateResponse { get; set; }
 
     [Parameter]
-    public IList<IBrowserFile>? ProductImages { get; set; } = new List<IBrowserFile>();
+    public List<IBrowserFile>? ProductImages { get; set; } = new();
 
     private long maxFileSize = 1024 * 10 * 10;
-    private int maxAllowedFiles = 1;
+    private int maxAllowedFiles = 3;
     private bool isLoading;
     
     private string? stringValue { get; set; }

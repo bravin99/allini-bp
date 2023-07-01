@@ -31,7 +31,8 @@ else
     private Product? _productToEdit;
     private Category[]? _categories;
     public string? Response;
-    private IList<IBrowserFile>? _productImages = new List<IBrowserFile>();
+    private List<IBrowserFile>? _productImages;
+    
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,9 +68,8 @@ else
     {
         if (_productImages != null)
         {
-            var location = await UtilsService.UploadImage(_productImages[0]);
-            if (!string.IsNullOrEmpty(location))
-                _productDto.Image = location;
+            var location = $"Development/unsafe_uploads/{_productImages.First().Name}";
+            _productDto.Image = location;
         }
         
         var response = await ProductService.UpdateProduct(Id, _productDto);
@@ -79,6 +79,7 @@ else
 
     private void GoBack()
     {
+        Console.WriteLine(_productImages);
         NavigationManager.NavigateTo("/products");
     }
 
