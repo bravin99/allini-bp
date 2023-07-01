@@ -35,7 +35,7 @@
                     </MudSelect>
                     @* <MudSwitch Label="Display?" @bind-Checked="@ProductDto.Display" Color="Color.Secondary" Class="mt-3" /> *@
                     <MudItem Class="mt-3">
-                        <InputFile OnChange="LoadFiles"/>
+                        <InputFile OnChange="@LoadFiles" multiple/>
                     </MudItem>
                 </MudCardContent>
                 <MudCardActions>
@@ -80,26 +80,29 @@
     
     private string? stringValue { get; set; }
 
-    public async void LoadFiles(InputFileChangeEventArgs e)
+    private async void LoadFiles(InputFileChangeEventArgs e)
     {
         isLoading = true;
         ProductImages.Clear();
 
-        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+        if (e != null)
         {
-            try
+            foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
             {
-                ProductImages.Add(file);
-                var trustedFileNameForFileStorage = Path.GetRandomFileName();
-                var path = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName, "unsafe_uploads", 
-                    trustedFileNameForFileStorage);
-                await using FileStream fs = new(path, FileMode.Create);
-                await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
-                Snackbar.Add($"{file.Name} added", Severity.Success);
-            }
-            catch (Exception ex)
-            {
-                Snackbar.Add($"file upload error", Severity.Error);
+                try
+                {
+                    ProductImages.Add(file);
+                    var trustedFileNameForFileStorage = Path.GetRandomFileName();
+                    var path = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName, "unsafe_uploads", 
+                        trustedFileNameForFileStorage);
+                    await using FileStream fs = new(path, FileMode.Create);
+                    await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
+                    Snackbar.Add($"{file.Name} added", Severity.Success);
+                }
+                catch (Exception ex)
+                {
+                    Snackbar.Add($"file upload error", Severity.Error);
+                }
             }
             
         }
