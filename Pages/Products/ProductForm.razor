@@ -34,7 +34,7 @@
                         }
                     </MudSelect>
                     @* <MudSwitch Label="Display?" @bind-Checked="@ProductDto.Display" Color="Color.Secondary" Class="mt-3" /> *@
-                    <MudItem Class="mt-3">
+                    <MudItem Class="mt-5">
                         <InputFile OnChange="@LoadFiles" multiple/>
                     </MudItem>
                 </MudCardContent>
@@ -93,7 +93,8 @@
             try
             {
                 ProductImages.Add(file);
-                var trustedFileNameForFileStorage = file.Name;
+                var trustedFileNameForFileStorage = Path.GetRandomFileName();
+                // TODO: Image type
                 var path = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName, "unsafe_uploads", 
                     trustedFileNameForFileStorage);
                 await using FileStream fs = new(path, FileMode.Create);
