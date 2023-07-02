@@ -80,8 +80,6 @@
     [Parameter] public Category[]? categories { get; set; }
     [Parameter] public string? CreateResponse { get; set; }
     
-    [Parameter] public string ImageName { get; set; }
-
     private long maxFileSize = 1024 * 10 * 10;
     private int maxAllowedFiles = 1;
     private bool isLoading;
@@ -98,38 +96,7 @@
             Snackbar.Add("Image was not recognized", Severity.Error);
             return;
         }
-        // ImageName = uploadResult.Result;
-        Console.WriteLine($"{uploadResult.Result} ---> {uploadResult}");
         ProductDto.Image = uploadResult.Result;
     }
 
-    // private async void LoadFiles(InputFileChangeEventArgs e)
-    // {
-    //     isLoading = true;
-    //     ProductImages ??= new List<IBrowserFile>();
-    //     var files = e.GetMultipleFiles(maxAllowedFiles);
-    //     
-    //     if (files == null) return;
-    //     
-    //     foreach (var file in files)
-    //     {
-    //         try
-    //         {
-    //             ProductImages.Add(file);
-    //             var trustedFileNameForFileStorage = Path.GetRandomFileName();
-    //             var path = Path.Combine(Environment.ContentRootPath, Environment.EnvironmentName, "unsafe_uploads", 
-    //                 trustedFileNameForFileStorage);
-    //             await using FileStream fs = new(path, FileMode.Create);
-    //             await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
-    //             Snackbar.Add($"{file.Name} added", Severity.Success);
-    //         }
-    //         catch (Exception ex)
-    //         {
-    //             Snackbar.Add($"file upload error", Severity.Error);
-    //             Console.WriteLine(ex);
-    //         }
-    //     }
-    //     
-    // }
-    
 }

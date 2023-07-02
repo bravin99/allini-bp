@@ -45,8 +45,6 @@ namespace allinibp.Services
                     trustedFilename);
                 FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
                 filestream.Close();
-                Console.WriteLine($"At utils: {path}.{file.ContentType}");
-
                 return $"{path}.{file.ContentType}";
             }
             catch (Exception e)
