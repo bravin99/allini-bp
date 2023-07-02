@@ -296,6 +296,10 @@ namespace allinibp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ImageType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateOnly>("LastCount")
                         .HasColumnType("date");
 
