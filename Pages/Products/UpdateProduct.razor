@@ -13,7 +13,8 @@
         <MudPaper Class="mb-5" Elevation="0">
             <h1 class="text-center">Update Product: @_productToEdit.Name</h1>
         </MudPaper>
-        <ProductForm ProductDto="_productDto" ProductImages="_productImages" OnValidSubmit="OnValidSubmit" CreateResponse="Response" categories="_categories" ButtonTxt="Update Product"/>
+        <ProductForm ProductDto="_productDto" OnValidSubmit="OnValidSubmit" CreateResponse="Response" 
+                     categories="_categories" ButtonTxt="Update Product"/>
     </MudContainer>
 }
 else
@@ -31,8 +32,7 @@ else
     private Product? _productToEdit;
     private Category[]? _categories;
     public string? Response;
-    private List<IBrowserFile>? _productImages;
-    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -64,14 +64,22 @@ else
         _productToEdit = await ProductService.GetProduct(Id)!;
     }
 
+    // private async Task LoadFile(IBrowserFile file)
+    // {
+    //     if (file == null!) return;
+    //     var uploadResult = UtilsService.UploadImage(file);
+    //     Console.WriteLine($"At update 1 {uploadResult.Result} -> {uploadResult}");
+    //     if (uploadResult == null!)
+    //     {
+    //         Snackbar.Add("Image was not recognized", Severity.Error);
+    //         return;
+    //     }
+    //     _productDto.Image = uploadResult.Result;
+    //     Console.WriteLine($"At razor DTO {_productDto.Image}");
+    // }
+
     private async Task OnValidSubmit()
     {
-        if (_productImages != null)
-        {
-            var location = $"Development/unsafe_uploads/{_productImages.First().Name}";
-            _productDto.Image = location;
-        }
-        
         var response = await ProductService.UpdateProduct(Id, _productDto);
         Snackbar.Add(response, Severity.Success);
         GoBack();
@@ -79,7 +87,6 @@ else
 
     private void GoBack()
     {
-        Console.WriteLine(_productImages);
         NavigationManager.NavigateTo("/products");
     }
 

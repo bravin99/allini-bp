@@ -86,6 +86,7 @@ namespace allinibp.Services
             product.SalesPrice = request.SalesPrice;
             product.EndOfShelfLife = DateTime.SpecifyKind((DateTime)request.EndOfShelfLife!, DateTimeKind.Utc);
             product.Image = request.Image!;
+            product.ImageType = request.ImageType!;
             product.Location = request.Location;
             product.LastCount = _myUtils.ToDateOnly(DateTime.UtcNow).Result;
 
