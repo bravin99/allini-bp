@@ -44,7 +44,7 @@ namespace allinibp.Services
                     trustedFilename);
                 FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
                 filestream.Close();
-                return $"{path}.{file.ContentType}";
+                return path;
             }
             catch (Exception exc)
             {
