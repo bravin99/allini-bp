@@ -33,9 +33,7 @@ namespace allinibp.Services
             var nDate = new DateOnly(date.Year, date.Month, date.Day);
             return Task.FromResult<DateOnly>(nDate);
         }
-
-        private long maxFileSize = 10 * 1024 * 1024;
-
+        
         public async Task<string?> UploadImage(IBrowserFile file)
         {
             try
@@ -49,7 +47,7 @@ namespace allinibp.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
                 return null!;
             }
         }

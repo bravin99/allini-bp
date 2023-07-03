@@ -79,8 +79,8 @@
     // [Parameter] public DateTime? EndOfLifeDate { get; set; }
     [Parameter] public Category[]? categories { get; set; }
     [Parameter] public string? CreateResponse { get; set; }
-    
-    private long maxFileSize = 1024 * 10 * 10;
+
+    private long _maxFileSize = 1024 * 1025 * 3; // 3mb limit
     private int maxAllowedFiles = 1;
     private bool isLoading;
     
@@ -89,11 +89,17 @@
     public async Task UploadFile(IBrowserFile file)
     {
         if (file == null!) return;
+        
+        if (file.Size > _maxFileSize)
+        {
+            Snackbar.Add("file is too big, onl 3MB allowed", Severity.Error);
+            return;
+        }
+        
         var uploadResult = UtilsService.UploadImage(file);
-        Console.WriteLine($"At update 1 {uploadResult.Result} -> {uploadResult}");
         if (uploadResult == null!)
         {
-            Snackbar.Add("Image was not recognized", Severity.Error);
+            Snackbar.Add("Image upload error, please try again", Severity.Error);
             return;
         }
         ProductDto.Image = uploadResult.Result;
