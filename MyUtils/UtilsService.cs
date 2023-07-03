@@ -38,16 +38,17 @@ namespace allinibp.Services
         {
             try
             {
-                var trustedFilename = Path.GetRandomFileName();
+                var trustedFilename = Path.ChangeExtension(
+                    Path.GetRandomFileName(), Path.GetExtension(file.Name));
                 var path = Path.Combine(_hostEnvironment.ContentRootPath, _hostEnvironment.EnvironmentName, "unsafe_uploads",
                     trustedFilename);
                 FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
                 filestream.Close();
                 return $"{path}.{file.ContentType}";
             }
-            catch (Exception e)
+            catch (Exception exc)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(exc.Message);
                 return null!;
             }
         }
