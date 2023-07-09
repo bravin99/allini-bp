@@ -31,28 +31,14 @@
                     </label>
                 </fieldset>
                 <button id="login-submit" type="submit" class="contrast">Login</button>
-                <div>
-                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>&nbsp;
-                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    <br/>
-                    <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                </div>
             </form>
         </div>
         <div>
             <section>
-                <h3>Use another service to log in.</h3>
-                <hr />
+                <h3>Other Account Actions</h3>
+                <hr/>
                 @{
-                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                    {
-                        <div>
-                            <p>
-                                Sorry, no external authentication at the moment!
-                            </p>
-                        </div>
-                    }
-                    else
+                    if ((Model.ExternalLogins?.Count ?? 0) != 0)
                     {
                         <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
                             <div>
@@ -66,6 +52,14 @@
                         </form>
                     }
                 }
+                <div>
+                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                    <br/>
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                    <br/>
+                    <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                    <br/>
+                </div>
             </section>
         </div>
     </article>
