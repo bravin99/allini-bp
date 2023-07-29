@@ -162,6 +162,7 @@ else
         var response = await ProductService.AddSupplier(Id, suppliersToAdd);
         Snackbar.Add(response, Severity.Info);
         await OnInitializedAsync();
+        StateHasChanged();
     }
 
     async Task RemoveSupplier(int supplierId)
@@ -169,6 +170,7 @@ else
         var response = await ProductService.RemoveSupplier(_pageProduct!.Id, supplierId);
         Snackbar.Add(response, Severity.Info);
         await OnInitializedAsync();
+        StateHasChanged();
     }
 
 }

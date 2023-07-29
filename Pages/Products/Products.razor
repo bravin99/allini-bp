@@ -94,8 +94,9 @@
             $"You are about to delete product: {product?.Name}"))
         {
             var response = await ProductService.DeleteProduct(productId);
-            await OnInitializedAsync();
             Snackbar.Add(response, Severity.Success);
+            await OnInitializedAsync();
+            StateHasChanged();
         }
     }
 
